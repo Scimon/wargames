@@ -2,4 +2,4 @@ Basic wargame academy site
 
 www/ - base web directory for Apache.
 bin/ - scripts directory. Node scripts will live here
-
+db/ - SQL scripts for database creation go in here
