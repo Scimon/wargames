@@ -20,15 +20,17 @@ orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", function (succes
 
 	);
 	Hex.hasOne( 'type', Hextype );
-	Hex.hasOne( 'map', Hexmap );
 	Hexmap.hasMany( 'hexes', Hex, 'hex' );
 	Hexmap.hasOne( 'default_type', Hextype );
 	
 	console.log( "Hextypes" );
 	Hextype.sync();
-	console.log( "Hexes" );
+
+ 	console.log( "Hexes" );
 	Hex.sync();
+
 	console.log( "Hexmaps" );
 	Hexmap.sync();
+
     process.exit( 1 );
 });
