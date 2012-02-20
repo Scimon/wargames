@@ -13,7 +13,6 @@ var db = orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", functio
 	var Hexmap = db.define( 'hexmap',
 		{ 'name' : { 'type' : 'string' } },
 		{ 'methods' : { } },
-		{ '
 	);
 	var Hex = db.define( 'hex', 
 		{ 'x' : { 'type' : 'int' },
