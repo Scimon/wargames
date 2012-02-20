@@ -15,7 +15,7 @@ orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", function (succes
 				for ( var x = 0; x < width; x++ ) {
 					var top = 0 - Math.floor(x/2);
 					for ( var y = 0; y < height; y++ ) {
-						hex = new Hex( { 'x', x, 'y', y, 'type' : this.default_type } );
+						var hex = new Hex( { 'x', x, 'y', y, 'type' : this.default_type } );
 						this.addHex( hex );
 					}
 				}
