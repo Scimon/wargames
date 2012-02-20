@@ -1,11 +1,10 @@
 var orm = require("orm");
+var process = require("process");
 orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", function (success, db) {
     if (!success) {
         console.log("Could not connect to database!");
-        return;
+        process.exit( 1 );
     }
-
-    // you can now use db variable to define models
 	var Hextype = db.define( 'hextype',
 		{ 'name' : { 'type' : 'string' } },
 		{ 'methods' : {} } 
@@ -32,6 +31,5 @@ orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", function (succes
 	Hex.sync();
 	console.log( "Hexmaps" );
 	Hexmap.sync();
-	return;
+    process.exit( 1 );
 });
-console.log( "Done" );
