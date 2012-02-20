@@ -1,5 +1,4 @@
 var orm = require("orm");
-var process = require("process");
 orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", function (success, db) {
     if (!success) {
         console.log("Could not connect to database!");
