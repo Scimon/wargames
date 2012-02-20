@@ -26,8 +26,11 @@ orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", function (succes
 	Hexmap.hasMany( 'hexes', Hex, 'hex' );
 	Hexmap.hasOne( 'default_type', HexType );
 	
+	console.log( "Hextypes" );
 	Hextype.sync();
+	console.log( "Hexes" );
 	Hex.sync();
+	console.log( "Hexmaps" );
 	Hexmap.sync();
 	return;
 });
