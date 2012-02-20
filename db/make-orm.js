@@ -1,5 +1,5 @@
 var orm = require("orm");
-var db = orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", function (success, db) {
+orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", function (success, db) {
     if (!success) {
         console.log("Could not connect to database!");
         return;
@@ -24,8 +24,11 @@ var db = orm.connect("mysql://wargames:ed34CV%^@localhost/wargames_dev", functio
 	Hex.hasOne( 'type', Hextype );
 	Hex.hasOne( 'map', Hexmap );
 	Hexmap.hasMany( 'hexes', Hex, 'hex' );
+	Hexmap.hasOne( 'default_type', HexType );
 	
 	Hextype.sync();
 	Hex.sync();
 	Hexmap.sync();
+	return;
 });
+console.log( "Done" );
