@@ -5,7 +5,7 @@ use warnings;
     
 use base 'Mojolicious::Controller';
 
-sub main {
+sub index {
 	my $self = shift;
 	$self->holding();
 }
