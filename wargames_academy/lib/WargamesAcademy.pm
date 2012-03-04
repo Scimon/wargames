@@ -9,7 +9,7 @@ sub startup {
   my $r = $self->routes;
 
   # Default Route
-  $r->route('/:controller/:action/:id')->to('example#main', id => 1);
+  $r->route('/:controller/:action/:id')->to('site#main', id => 1);
 }
 
 1;
