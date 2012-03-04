@@ -1,7 +1,7 @@
 package WargamesAcademy;
 use Mojo::Base 'Mojolicious';
 
-use SystemUsers;
+use SystemUser;
 
 # This method will run once at server start
 sub startup {
