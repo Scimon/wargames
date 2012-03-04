@@ -11,8 +11,8 @@ sub startup {
   # Routes
   my $r = $self->routes;
 
-  # Normal route to controller
-  $r->route('/welcome')->to('example#welcome');
+  # Default Route
+  $r->route('/:controller/:action/:id')->to('example#welcome', id => 1);
 }
 
 1;
