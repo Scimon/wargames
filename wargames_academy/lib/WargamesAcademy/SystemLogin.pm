@@ -6,7 +6,7 @@ sub index {
 
 	my $user = $self->param('user') || '';
 	my $pass = $self->param('pass') || '';
-	return $self->render unless $self->users->check($user, $pass);
+	return $self->render unless $self->system_users->check($user, $pass);
 
 	$self->session(user => $user);
 	$self->flash(message => 'Thanks for logging in.');
