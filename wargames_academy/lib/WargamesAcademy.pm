@@ -4,7 +4,7 @@ use Mojo::Base 'Mojolicious';
 # This method will run once at server start
 sub startup {
   my $self = shift;
-
+  $self->secret( "ddkl23dijfop2v doijecwoimd" );
   # Routes
   my $r = $self->routes;
 
