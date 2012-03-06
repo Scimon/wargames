@@ -1,4 +1,8 @@
 package WargamesAcademy;
+use 5.010;
+use strict;
+use warnings;
+
 use Mojo::Base 'Mojolicious';
 
 use SystemUser;

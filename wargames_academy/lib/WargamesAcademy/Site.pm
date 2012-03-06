@@ -1,9 +1,9 @@
 package WargamesAcademy::Site;
-    
+use 5.010;
 use strict;	
 use warnings;
     
-use base 'Mojolicious::Controller';
+use Mojo::Base 'Mojolicious::Controller';
 
 sub index {
 	my $self = shift;

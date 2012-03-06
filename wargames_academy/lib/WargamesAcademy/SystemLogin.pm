@@ -1,4 +1,8 @@
 package WargamesAcademy::SystemLogin;
+use 5.010;  
+use strict;	
+use warnings;
+
 use Mojo::Base 'Mojolicious::Controller';
 
 sub index {
