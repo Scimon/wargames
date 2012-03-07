@@ -8,7 +8,7 @@
 	has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { -1 }, 'trigger' => \&_set_id_for_hexes;
 	
 	sub add_hex {
-		my $self, $hex = @_;
+		my ( $self, $hex ) = @_;
 		$self->hexes( [@{$self->hexes()},$hex] );
 	}
 	
