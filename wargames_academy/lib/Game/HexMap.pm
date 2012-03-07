@@ -5,7 +5,7 @@
 	use Game::Hex;
 	
 	has 'hexes', is => 'rw', isa => 'ArrayRef[Game::Hex]', default => sub { [] }, 'trigger' => '_set_id_for_hexes';
-	has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { -1 }, 'trigger' => '_set_id_for_hexes';
+	has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { -1 }, 'trigger' => \&_set_id_for_hexes;
 	
 	sub _set_id_for_hexes {
 		my $self = shift;
