@@ -4,5 +4,5 @@
 	use Moose;
 	
 	has 'x', is => 'rw', isa => 'Int';
-	hax 'y', is => 'rw', isa => 'Int';
+	has 'y', is => 'rw', isa => 'Int';
 }
