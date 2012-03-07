@@ -10,7 +10,9 @@
 	sub _set_id_for_hexes {
 		my $self = shift;
 		if ( $self->id() > -1 ) {
-			$self->hexes = [ map { $_->mapid( $self->id() ) } @$self->hexes ];
+			foreach my $hex ( @{$self->hexes()} ) {
+				$hex->mapid( $self->id() );
+			}
 		}
 	}
 	
