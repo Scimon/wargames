@@ -13,7 +13,7 @@
 		$self->hexes( [@{$self->hexes()},$hex] );
 	}
 	
-	sub _set_id_for_hexes {
+	sub _set_parent_for_hexes {
 		my $self = shift;
 		foreach my $hex ( @{$self->hexes()} ) {
 			$hex->map( $self );
