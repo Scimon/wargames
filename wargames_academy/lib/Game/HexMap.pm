@@ -4,8 +4,9 @@
 	use Moose;
 	use Game::Hex;
 	
-	has 'hexes', is => 'rw', isa => 'ArrayRef[Game::Hex]', default => sub { [] }, 'trigger' => \&_set_id_for_hexes;
-	has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { -1 }, 'trigger' => \&_set_id_for_hexes;
+	has 'hexes', is => 'rw', isa => 'ArrayRef[Game::Hex]', default => sub { [] }, 'trigger' => \&_set_parent_for_hexes;
+	has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { -1 };
+	has 'name', is => 'rw', isa => 'Str';
 	
 	sub add_hex {
 		my ( $self, $hex ) = @_;
@@ -14,10 +15,8 @@
 	
 	sub _set_id_for_hexes {
 		my $self = shift;
-		if ( $self->id() > -1 ) {
-			foreach my $hex ( @{$self->hexes()} ) {
-				$hex->mapid( $self->id() );
-			}
+		foreach my $hex ( @{$self->hexes()} ) {
+			$hex->map( $self );
 		}
 	}
 	

@@ -2,10 +2,12 @@
 	package Game::Hex;
 	
 	use Moose;
+	use Game::HexType;
 	
 	has 'x', is => 'rw', isa => 'Int';
 	has 'y', is => 'rw', isa => 'Int';
-	has 'mapid', is => 'rw', isa => 'Int', 'default' => sub { -1 };
+	has 'map', is => 'rw', isa => 'Game::HexMap';
+	has 'hextype', is => 'rw', isa => 'Game::HexType';
 	
 	'module returns true';
 }
