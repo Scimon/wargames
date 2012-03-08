@@ -3,8 +3,8 @@
 
 	use Moose;
 	extends 'Game::Hex::Vector';
-
-	has 'name', is => 'rw', 'isa' => 'Str';
+	
+	has 'type', is => 'ro', isa => 'Str';
 
 
 	'module returns true';
