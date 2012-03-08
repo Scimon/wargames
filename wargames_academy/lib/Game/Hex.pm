@@ -3,15 +3,14 @@
 	
 	use Moose;
 	use Game::HexType;
-	use Game::Hex::Vector;
+	use Game::Hex::Feature;
 	
 	has 'x', is => 'rw', isa => 'Int';
 	has 'y', is => 'rw', isa => 'Int';
 	has 'map', is => 'rw', isa => 'Game::HexMap';
 	has 'hextype', is => 'rw', isa => 'Game::HexType';
-	has 'height_base', is => 'rw', isa => 'Int';
-	has 'height_end', is => 'rw', isa => 'Int';
-	has 'slope', is => 'rw', isa => 'Game::Hex::Vector';
+	has 'height', is => 'rw', isa => 'Num'; 
+	has 'features', is => 'rw', isa => 'ArrayRef[Game::Hex::Feature]';
 	
 	'module returns true';
 }
