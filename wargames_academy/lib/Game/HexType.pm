@@ -1,9 +1,9 @@
 {
 	package Game::HexType;
 	
-	use Moose;
+	use Moose::Role;
 	
-	has 'name', is => 'rw', isa => 'Str';
+	has 'name', is => 'ro', isa => 'Str';
 	
 	'module returns true';
 }
