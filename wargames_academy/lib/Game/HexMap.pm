@@ -33,7 +33,7 @@
 			my $top = -( floor( $x / 2 ) );
 			for ( my $y = 0; $y < $height; $y++ ) {
 				
-				$self->hexes()->{$x}->{$top + $y} = new Game::Hex( 'x' => $x, 'y' => $y, 'map' => $self, 'hextype' => $default_type );
+				$self->hexes()->{$x}->{$top + $y} = new Game::Hex( 'x' => $x, 'y' => $y, 'map' => $self, 'hextype' => bless { %$default_type }, ref $default_type );
 			}
 		}
 	}
