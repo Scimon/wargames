@@ -6,5 +6,7 @@
 	
 	has 'type', is => 'ro', isa => 'Str', default => sub { 'river' };
 
+	__PACKAGE__->meta->make_immutable;
+
 	'module returns true';
 }

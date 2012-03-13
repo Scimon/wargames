@@ -11,6 +11,8 @@
 	has 'hextype', is => 'rw', isa => 'Game::HexType';
 	has 'height', is => 'rw', isa => 'Num'; 
 	has 'features', is => 'rw', isa => 'ArrayRef[Game::Hex::Feature]';
+
+	__PACKAGE__->meta->make_immutable;
 	
 	'module returns true';
 }

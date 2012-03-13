@@ -38,5 +38,7 @@
 		}
 	}
 
+	__PACKAGE__->meta->make_immutable;
+
 	'module returns true';
 }

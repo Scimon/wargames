@@ -14,5 +14,7 @@
 	has 'end', is => 'rw', isa => 'VectorPoint', default => sub { 's0' };
 	has 'points', is => 'rw', isa => 'ArrayRef[Int]', default => sub { [] };
 
+	__PACKAGE__->meta->make_immutable;
+
 	'module returns true';
 }

@@ -6,6 +6,7 @@
 	
 	has 'type', is => 'ro', isa => 'Str';
 
+	__PACKAGE__->meta->make_immutable;
 
 	'module returns true';
 }
