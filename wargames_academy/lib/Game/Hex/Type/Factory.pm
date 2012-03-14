@@ -10,6 +10,10 @@
 		my $self = shift;
 		my $type = shift;
 
+		if ( ref( $type ) ) {
+			$type = $type->name();
+		}
+
 		if ( defined $types{$type} ) {
 			return $types{$type}->new();
 		} else {
