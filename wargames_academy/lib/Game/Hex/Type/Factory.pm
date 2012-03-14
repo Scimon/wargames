@@ -1,10 +1,10 @@
 {
-	package Game::HexType::Factory;
+	package Game::Hex::Type::Factory;
 
 	use Moose;
-	use Game::HexType::Grass;
+	use Game::Hex::Type::Grass;
 
-	my %types = map { $_ => "Game::HexType::$_" } qw( Grass );
+	my %types = map { $_ => "Game::Hex::Type::$_" } qw( Grass );
 
 	sub make {
 		my $self = shift;

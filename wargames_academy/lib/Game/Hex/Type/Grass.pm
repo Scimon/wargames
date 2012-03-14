@@ -1,9 +1,9 @@
 {
-	package Game::HexType::Grass;
+	package Game::Hex::Type::Grass;
 
 	use Moose;
 
-	with 'Game::HexType';
+	with 'Game::Hex::Type';
 
 	around BUILDARGS => sub {
 		my $orig  = shift;

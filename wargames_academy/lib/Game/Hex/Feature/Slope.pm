@@ -2,9 +2,13 @@
 	package Game::Hex::Feature::Slope;
 
 	use Moose;
+	use MooseX::Storage;
+	
+	with Storage('format' => 'JSON');
 	extends 'Game::Hex::Feature';
 	with 'Game::Hex::Vector';
 	
+
 	has 'start_height', is => 'rw', isa => 'Int', default => 1;
 	has 'end_height', is => 'rw', isa => 'Int', default => 1;
  

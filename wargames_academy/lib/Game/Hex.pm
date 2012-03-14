@@ -2,13 +2,17 @@
 	package Game::Hex;
 	
 	use Moose;
-	use Game::HexType;
+	use Game::Hex::Type;
 	use Game::Hex::Feature;
+
+	use MooseX::Storage;
+
+	with Storage('format' => 'JSON');
 	
 	has 'x', is => 'rw', isa => 'Int';
 	has 'y', is => 'rw', isa => 'Int';
 	has 'map', is => 'rw', isa => 'Game::HexMap';
-	has 'hextype', is => 'rw', isa => 'Game::HexType';
+	has 'hextype', is => 'rw', isa => 'Game::Hex::Type';
 	has 'height', is => 'rw', isa => 'Num', default => 1; 
 	has 'features' => (
 		trigger => \&_apply_features,
@@ -27,8 +31,6 @@
 		my $self = shift;
 
 		foreach my $feature ( $self->feature_list() ) {
-			use Data::Dumper;
-			print Dumper( $feature );
 			$feature->apply( $self );
 		}
 	}

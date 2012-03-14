@@ -2,6 +2,10 @@
 	package Game::Hex::Feature::River;
 
 	use Moose;
+	use MooseX::Storage;
+	
+	with Storage('format' => 'JSON');
+
 	extends 'Game::Hex::Feature';
 	with 'Game::Hex::Vector';
 	
