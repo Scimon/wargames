@@ -5,16 +5,21 @@
 	extends 'Game::Hex::Feature';
 	with 'Games::Hex::Vector';
 	
-	has 'start_height', is => 'rw', isa => 'Int';
-	has 'end_height', is => 'rw', isa => 'Int';
-	has 'mid_point', is => 'rw', isa => 'Int', default => sub { 50 };
-
+	has 'start_height', is => 'rw', isa => 'Int', default => sub { 1 };
+	has 'end_height', is => 'rw', isa => 'Int', default => sub { 1 };
+ 
 	around BUILDARGS => sub {
 		my $orig  = shift;
 		my $class = shift;
 		
 		return $class->$orig( { 'type' => 'Slope' } );
 	};
+
+	sub apply {
+		my ( $self, $hex ) = @_;
+		$hex->height( ( $self->start_height() + $self->end_height() ) / 2 );
+	}
+
 
 	__PACKAGE__->meta->make_immutable;
 
