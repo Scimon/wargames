@@ -9,29 +9,23 @@
 	use Game::Hex;
 	use Game::Hex::Type::Factory;
 	use POSIX qw( floor );
+
+	use DBI;
 	
-	has 'hexes', is => 'rw', isa => 'HashRef[HashRef[Game::Hex]]', default => sub { {} };
-	has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { -1 };
-	has 'name', is => 'rw', isa => 'Str';
-	
-	sub add_hexes {
-		my ( $self, @hexes ) = @_;
-		foreach my $hex ( @hexes ) {
-			$hex->map( $self );
-			$self->hexes()->{$hex->x()}->{$hex->y()} = $hex;
-		}
-	}
-	
-	sub _set_parent_for_hexes {
-		my $self = shift;
-		foreach my $x ( keys %{$self->hexes()} ) {
-			my $ref = $self->hexes($x);
-			foreach my $y ( keys %{$self->hexes()->{$x}} ) {
-				$self->hexes()->{$x}->{$y}->map($self);
-			}
-		}
-	}
-	
+	has 'hexes' => ( is => 'rw', 
+					 isa => 'ArrayRef[Game::Hex]', 
+					 traits =>  ['Array'], 
+					 handles => {
+						 'add_hex' => 'push',
+						 'remove_hexes' => 'clear',
+						 'hex_list' => 'elements',
+						 'map_hexes' => 'map',
+					 },
+					 default => sub { [] }
+		);
+	has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { 0 };
+	has 'name', is => 'rw', isa => 'Str', 'default' => sub { '' };
+			
 	sub make_map {
 		my ( $self, $height, $width, $default_type  ) = @_;
 		my $factory = new Game::Hex::Type::Factory();
@@ -39,8 +33,26 @@
 			my $top = -( floor( $x / 2 ) );
 			for ( my $l = 0; $l < $height; $l++ ) {
 				my $y = $top + $l;
-				$self->hexes()->{$x}->{$y} = new Game::Hex( 'x' => $x, 'y' => $y, 'map' => $self, 'type' => $factory->make( $default_type ) );
+				my $hex = new Game::Hex( 'x' => $x, 
+										 'y' => $y, 
+										 'mapid' => $self->id(),
+										 'type' => $factory->make( $default_type ) );
+				$self->add_hex( $hex );
 			}
+		}
+	}
+
+	sub save {
+		my $self = shift;
+
+		my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
+
+		if ( $self->id() ) {
+			$dbh->prepare( "UPDATE hexmap SET name = ? WHERE id = ?", undef, ( $self->name(), $self->id() ) );
+		} else {
+			$dbh->prepare( "INSERT INTO hexmap ( name ) VALUES ( ? )", undef, ( $self->name() ) );
+			$self->id( $dbh->last_insert_id() );
+			$self->map_hexes( $_->mapid( $self->id() ) );
 		}
 	}
 

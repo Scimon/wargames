@@ -8,10 +8,10 @@
 	use MooseX::Storage;
 
 	with Storage('format' => 'JSON');
-	
+
+	has 'mapid', is => 'rw', isa => 'Int';
 	has 'x', is => 'rw', isa => 'Int';
 	has 'y', is => 'rw', isa => 'Int';
-	has 'map', is => 'rw', isa => 'Game::HexMap';
 	has 'type', is => 'rw', isa => 'Game::Hex::Type';
 	has 'height', is => 'rw', isa => 'Num', default => 1; 
 	has 'features' => (
