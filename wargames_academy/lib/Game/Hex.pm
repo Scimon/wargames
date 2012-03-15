@@ -4,7 +4,7 @@
 	use Moose;
 	use Game::Hex::Type;
 	use Game::Hex::Feature;
-
+	use JSON;
 	use MooseX::Storage;
 
 	with Storage('format' => 'JSON');
@@ -23,7 +23,8 @@
 		handles => {
 			'add_feature' => 'push',
 			'remove_features' => 'clear',
-			'feature_list' => 'elements'
+			'feature_list' => 'elements',
+			'map_features' => 'map',
 		},
 	);
 	
@@ -33,6 +34,21 @@
 		foreach my $feature ( $self->feature_list() ) {
 			$feature->apply( $self );
 		}
+	}
+
+	sub save {
+	    my $self = shift;
+	    my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
+
+	    if ( $self->mapid() ) {
+		my $features = encode_json( [ $self->map_features( sub { $_->freeze() } ) ] );
+		$dbh->do( "INSERT INTO hex ( map_id, x, y, hextype, features ) 
+                           VALUES ( ?, ?, ?, ?, ? )
+                           ON DUPLICATE KEY UPDATE hextype = ?, features = ?", undef,
+			  $self->mapid(), $self->x(), $self->y(),
+			  $self->type()->name(), $features, $self->type()->name(), $features );
+	    }
+
 	}
 
 	__PACKAGE__->meta->make_immutable;

@@ -14,5 +14,6 @@ CREATE TABLE wargames_dev.hex (
 	`x` INT(10) NOT NULL DEFAULT 0,
 	`y` INT(10) NOT NULL DEFAULT 0,
 	`hextype` VARCHAR(255) NOT NULL DEFAULT '',
+	`features` TEXT NOT NULL DEFAULT '',
 	PRIMARY KEY ( `map_id`, `x`, `y` )
 );
