@@ -36,8 +36,8 @@
 		my $y = $top + $l;
 		my $hex = new Game::Hex( 'x' => $x, 
 					 'y' => $y, 
-					 'mapid' => $self->id(),
-					 'type' => $factory->make( $default_type ) );
+					 'map_id' => $self->id(),
+					 'hextype' => $factory->make( $default_type ) );
 		$self->add_hex( $hex );
 	    }
 	}
@@ -49,11 +49,11 @@
 	
 	if ( $self->id() ) {
 	    $dbh->do( "UPDATE hexmap SET name = ? WHERE id = ?", undef, ( $self->name(), $self->id() ) );
-	    $self->map_hexes( sub { $_->mapid( $self->id() ) } );
+	    $self->map_hexes( sub { $_->map_id( $self->id() ) } );
 	} else {
 	    $dbh->do( "INSERT INTO hexmap ( name ) VALUES ( ? )", undef, ( $self->name() ) );
 	    $self->id( $dbh->last_insert_id(undef, undef, undef, undef) );
-	    $self->map_hexes( sub { $_->mapid( $self->id() ) } );
+	    $self->map_hexes( sub { $_->map_id( $self->id() ) } );
 	}
 
 	foreach my $hex ( $self->hex_list() ) {
@@ -62,30 +62,28 @@
     }
     
     sub load {
-	my $self = shift;
-	if ( $self->id() ) {
-	    my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
-	    my @data = $dbh->selectrow_array( "SELECT name FROM hexmap WHERE id = ?",undef, $self->id() );
-	    $self->name( $data[0] );
-
-	    my $sth = $dbh->prepare( "SELECT x,y,hextype,features FROM hex WHERE map_id = ?" );
-	    $sth->execute( $self->id() );
-
-	    my $type_fac = new Game::Hex::Type::Factory();
-	    my $feature_fac = new Game::Hex::Feature::Factory();
-
-	    while ( my $row = $sth->fetchrow_hashref() ) {
-		my $type = $type_fac->make( $row->{'hextype'} );
-		my $hex = new Game::Hex( 'x' => $row->{'x'}, 'y' => $row->{'y'}, 'mapid' => $self->id() );
-		my $features = decode_json( $row->{'features'} );
-		foreach my $json ( @{$features} ) {
-		    use Data::Dumper;
-		    print Dumper( $json );
-		    $hex->add_feature( $feature_fac->thaw( $json ) );
+		my $self = shift;
+		if ( $self->id() ) {
+			my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
+			my @data = $dbh->selectrow_array( "SELECT name FROM hexmap WHERE id = ?",undef, $self->id() );
+			$self->name( $data[0] );
+			
+			my $sth = $dbh->prepare( "SELECT x,y,hextype,features FROM hex WHERE map_id = ?" );
+			$sth->execute( $self->id() );
+			
+			my $type_fac = new Game::Hex::Type::Factory();
+			my $feature_fac = new Game::Hex::Feature::Factory();
+			
+			while ( my $row = $sth->fetchrow_hashref() ) {
+				my $type = $type_fac->make( $row->{'hextype'} );
+				my $hex = new Game::Hex( 'x' => $row->{'x'}, 'y' => $row->{'y'}, 'map_id' => $self->id(), 'hextype' => $type );
+				my $features = decode_json( $row->{'features'} );
+				foreach my $json ( @{$features} ) {
+					$hex->add_feature( $feature_fac->thaw( $json ) );
+				}
+				$self->add_hex( $hex );
+			}
 		}
-		$self->add_hex( $hex );
-	    }
-	}
     }
 
     __PACKAGE__->meta->make_immutable;

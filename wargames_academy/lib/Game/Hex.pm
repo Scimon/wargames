@@ -9,10 +9,10 @@
 
 	with Storage('format' => 'JSON');
 
-	has 'mapid', is => 'rw', isa => 'Int';
+	has 'map_id', is => 'rw', isa => 'Int';
 	has 'x', is => 'rw', isa => 'Int';
 	has 'y', is => 'rw', isa => 'Int';
-	has 'type', is => 'rw', isa => 'Game::Hex::Type';
+	has 'hextype', is => 'rw', isa => 'Game::Hex::Type';
 	has 'height', is => 'rw', isa => 'Num', default => 1; 
 	has 'features' => (
 		trigger => \&_apply_features,
@@ -40,13 +40,13 @@
 	    my $self = shift;
 	    my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
 
-	    if ( $self->mapid() ) {
+	    if ( $self->map_id() ) {
 		my $features = encode_json( [ $self->map_features( sub { $_->freeze() } ) ] );
 		$dbh->do( "INSERT INTO hex ( map_id, x, y, hextype, features ) 
                            VALUES ( ?, ?, ?, ?, ? )
                            ON DUPLICATE KEY UPDATE hextype = ?, features = ?", undef,
-			  $self->mapid(), $self->x(), $self->y(),
-			  $self->type()->name(), $features, $self->type()->name(), $features );
+			  $self->map_id(), $self->x(), $self->y(),
+			  $self->hextype()->name(), $features, $self->hextype()->name(), $features );
 	    }
 
 	}
