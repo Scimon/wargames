@@ -1,0 +1,5 @@
+% layout 'admin';
+<h2>Maps Available to Edit</h2>
+<% foreach my $hex ( $collection->elements() ) { %>
+   <p><%= $hex->name() %></p>
+<% } %>

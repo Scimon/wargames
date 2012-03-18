@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+  <head><title>Admin : <%= title %></title></head>
+  <body>
+    <h1>Wargames Academy Admin System</h1>
+    <p><a href="/admin">Admin</a></p>
+    <%= content %>
+  </body>
+</html>
