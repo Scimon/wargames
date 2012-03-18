@@ -1,0 +1,3 @@
+% layout 'admin';
+<h2>Map Editor : <%= $Map->name() %></h2>
+
