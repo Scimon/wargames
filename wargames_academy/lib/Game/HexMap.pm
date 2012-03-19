@@ -11,7 +11,7 @@
     use Game::Hex::Feature::Factory;
     use POSIX qw( floor );
     use JSON;    
-    use DBI;
+	use Database;
     
     has 'hexes' => ( is => 'rw', 
 		     isa => 'ArrayRef[Game::Hex]', 
@@ -45,7 +45,7 @@
     
     sub save {
 	my $self = shift;
-	my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
+	my $dbh = Database::connection();
 	
 	if ( $self->id() ) {
 	    $dbh->do( "UPDATE hexmap SET name = ? WHERE id = ?", undef, ( $self->name(), $self->id() ) );
@@ -64,7 +64,7 @@
     sub load {
 		my $self = shift;
 		if ( $self->id() ) {
-			my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
+			my $dbh = Database::connection();
 			my @data = $dbh->selectrow_array( "SELECT name FROM hexmap WHERE id = ?",undef, $self->id() );
 			$self->name( $data[0] );
 			

@@ -3,7 +3,7 @@
 
     use Moose;
     use Game::HexMap;
-    use DBI;
+    use Database;
 
     has list => (
 	is => 'ro', 
@@ -20,7 +20,7 @@
       	);
     
     sub _load_list {
-	my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
+	my $dbh = Database::connection();
 
 	my $sth = $dbh->prepare( "SELECT id FROM hexmap" );
 	$sth->execute();

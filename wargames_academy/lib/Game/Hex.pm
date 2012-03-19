@@ -6,6 +6,7 @@
 	use Game::Hex::Feature;
 	use JSON;
 	use MooseX::Storage;
+    use Database;
 
 	with Storage('format' => 'JSON');
 
@@ -38,7 +39,7 @@
 
 	sub save {
 	    my $self = shift;
-	    my $dbh = DBI->connect("DBI:mysql:database=wargames_dev;host=localhost", "wargames", 'ed34CV%^');
+	    my $dbh = Database::connection();
 
 	    if ( $self->map_id() ) {
 		my $features = encode_json( [ $self->map_features( sub { $_->freeze() } ) ] );
