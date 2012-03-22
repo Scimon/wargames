@@ -25,7 +25,8 @@ sub map {
     $map->load();
     
     $self->stash( 'title' => 'Edit : ' . $map->name(), 
-		  'Map' => $map );
+		  'Map' => $map,
+	          'map_json' => $map->freeze() );
 
     $self->render;
 }
