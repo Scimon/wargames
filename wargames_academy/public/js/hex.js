@@ -80,8 +80,6 @@ var HexMap = function( origin, radius ) {
 	}
 
 	return {
-//		'origin' : origin,
-//		'radius' : radius, 
 		'hexcanvas' : function() {
 			return { 'height' : height * 2, 'width' : radius * 2 };
 		},

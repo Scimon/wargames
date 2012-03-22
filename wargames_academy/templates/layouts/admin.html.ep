@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head><title>Admin : <%= title %></title></head>
+  <head><title>Admin : <%= title %></title>
+    <%= content_for 'header' %>
+  </head>
   <body>
     <h1>Wargames Academy Admin System</h1>
     <p><a href="/admin">Admin</a></p>

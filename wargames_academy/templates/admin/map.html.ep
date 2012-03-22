@@ -1,3 +1,60 @@
 % layout 'admin';
+% content_for header => begin
+<script src="/js/json2.js"></script>
+<!-- script src="/js/hex.js"></script>
+<script src="/js/hextypes.js"></script>
+<script src="/js/game.js"></script -->
+<script src="/js/jquery.js"></script>
+<script>var mapdata = <%== $map_json %>;</script>
+<style type="text/css">
+#gamemap {
+position: relative; border: 1px solid #000; height: 800px; width: 800px; overflow: hidden; background: #000;
+}
+.back { background: #fff }
+.layer{ position: absolute; }
+#mapdata { float: right; width: 300px; height: 300px; }
+#update { clear: right; float: right }
+</style>
+% end
+
 <h2>Map Editor : <%= $Map->name() %></h2>
-<script>var map = '<%== $map_json %></script>
+
+<p>Scale <input class="scale" type="button" value="1">
+<input class="scale" type="button" value="2">
+<input class="scale" type="button" value="3">
+<input class="scale" type="button" value="4">
+<input class="scale" type="button" value="5">
+<input class="scale" type="button" value="6">
+<input class="scale" type="button" value="7">
+<input class="scale" type="button" value="8">
+<input class="scale" type="button" value="9">
+<input class="scale" type="button" value="10">
+ | 
+<input type="button" id="left" value="&lt;">
+<input type="button" id="up" value="/\">
+<input type="button" id="down" value="\/">
+<input type="button" id="right" value="&gt;">
+</p>
+<textarea id="mapdata"></textarea>
+<input id="update" type="button" value="Update Map" />
+<div id="gamemap"></div>
+
+
+<script>
+$(document).ready( 
+function() {
+$('#mapdata')[0].value = JSON.stringify(mapdata);
+//var game = new Game( 'gamemap' );
+//if ( game != null ) {
+//game.loadMapData( mapdata );
+//}
+//$('.scale').click( function() { game.setScale( this.value * 1 );  } );
+//$('#up').click( function() { game.movePosition( 0, -1 ); } );
+//$('#down').click( function() { game.movePosition( 0, 1 ); } );
+//$('#left').click( function() { game.movePosition( -1, 0 ); } );
+//$('#right').click( function() { game.movePosition( 1, 0 ); } );
+
+}
+);
+</script>
+
