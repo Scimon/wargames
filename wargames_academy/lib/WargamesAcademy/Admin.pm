@@ -24,11 +24,24 @@ sub map {
     my $map = new Game::HexMap( 'id' => $id );
     $map->load();
     
-    $self->stash( 'title' => 'Edit : ' . $map->name(), 
-				  'Map' => $map,
-				  'map_json' => $map->freeze(),
-				  'modules' => [ 'Game', 'Game/HexMap', 'Game/Hex', 'Game/Hex/Feature', 'Game/Hex/Vector', 'Game/Hex/Feature/River', 'Game/Hex/Feature/Slope', 'Game/Hex/Type', 'Game/Hex/Type/Grass' ] );
-
+    $self->stash( 
+	'title' => 'Edit : ' . $map->name(), 
+	'Map' => $map,
+	'map_json' => $map->freeze(),
+	'modules' => [ 
+	    'Game/Hex/Feature', 
+	    'Game/Hex/Vector', 
+	    'Game/Hex/Feature/River', 
+	    'Game/Hex/Feature/Slope', 
+	    'Game/Hex/Type', 
+	    'Game/Hex/Type/Grass',
+	    'Game/Hex', 	  
+	    'Game/HexMap', 
+	    'Game', 
+	    'Editor',
+	] 
+	);
+    
     $self->render;
 }
 

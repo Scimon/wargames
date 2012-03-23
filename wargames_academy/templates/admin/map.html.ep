@@ -45,7 +45,9 @@ position: relative; border: 1px solid #000; height: 800px; width: 800px; overflo
 <script>
 $(document).ready( 
 function() {
-$('#mapdata')[0].value = JSON.stringify(mapdata);
+window.editor = new Editor( { 'mapdata' : mapdata } );
+$('#mapdata')[0].value = JSON.stringify(editor.get('mapdata'));
+
 //var game = new Game( 'gamemap' );
 //if ( game != null ) {
 //game.loadMapData( mapdata );
