@@ -1,10 +1,12 @@
 % layout 'admin';
 % content_for header => begin
 <script src="/js/json2.js"></script>
-<!-- script src="/js/hex.js"></script>
-<script src="/js/hextypes.js"></script>
-<script src="/js/game.js"></script -->
+<script src="/js/underscore.js"></script>
+<script src="/js/backbone.js"></script>
 <script src="/js/jquery.js"></script>
+<% foreach my $script ( @{$modules} ) { %>
+<script src="/js/<%= $script %>.js"></script>
+<% } %>
 <script>var mapdata = <%== $map_json %>;</script>
 <style type="text/css">
 #gamemap {

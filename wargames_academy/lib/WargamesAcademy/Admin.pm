@@ -25,8 +25,9 @@ sub map {
     $map->load();
     
     $self->stash( 'title' => 'Edit : ' . $map->name(), 
-		  'Map' => $map,
-	          'map_json' => $map->freeze() );
+				  'Map' => $map,
+				  'map_json' => $map->freeze(),
+				  'modules' => [ 'Game', 'Game_HexMap', 'Game_Hex', 'Game_Hex_Feature', 'Game_Hex_Vector', 'Game_Hex_Feature_River', 'Game_Hex_Feature_Slope', 'Game_Hex_Type', 'Game_Hex_Type_Grass' ] );
 
     $self->render;
 }

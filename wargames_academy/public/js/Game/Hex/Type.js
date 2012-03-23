@@ -1,2 +1,2 @@
-var Game_Type = Backbone.Model.extend( {
+var Game_Hex_Type = Backbone.Model.extend( {
 } );
