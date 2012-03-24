@@ -1,9 +1,9 @@
 % layout 'admin';
 % content_for header => begin
 <script src="/js/json2.js"></script>
+<script src="/js/jquery.js"></script>
 <script src="/js/underscore.js"></script>
 <script src="/js/backbone.js"></script>
-<script src="/js/jquery.js"></script>
 <% foreach my $script ( @{$modules} ) { %>
 <script src="/js/<%= $script %>.js"></script><% } %>
 <script>var mapdata = <%== $map_json %>;</script>
@@ -12,7 +12,7 @@
 position: relative; border: 1px solid #000; height: 800px; width: 800px; overflow: hidden; background: #000;
 }
 .back { background: #fff }
-.layer{ position: absolute; }
+.game-layer{ position: absolute; }
 #mapdata { float: right; width: 300px; height: 300px; }
 #update { clear: right; float: right }
 </style>
@@ -40,11 +40,6 @@ position: relative; border: 1px solid #000; height: 800px; width: 800px; overflo
 
 
 <script>
-$(document).ready( 
-function() {
-window.editor = new Editor( { 'mapdata' : mapdata } );
-
-
 //var game = new Game( 'gamemap' );
 //if ( game != null ) {
 //game.loadMapData( mapdata );
@@ -54,8 +49,5 @@ window.editor = new Editor( { 'mapdata' : mapdata } );
 //$('#down').click( function() { game.movePosition( 0, 1 ); } );
 //$('#left').click( function() { game.movePosition( -1, 0 ); } );
 //$('#right').click( function() { game.movePosition( 1, 0 ); } );
-
-}
-);
 </script>
 

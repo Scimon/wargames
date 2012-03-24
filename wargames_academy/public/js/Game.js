@@ -22,6 +22,7 @@ var Game = Backbone.Model.extend( {
 		var Data = this.get('mapdata');
 		if ( Data.__CLASS__ === 'Game::HexMap' ) {
 		    delete Data.__CLASS__;
+		    Data.game = this;
 		    this.set( 'mapdata', new Game_HexMap( Data ) );		    
 		} else {
 		    unset( 'mapdata' );
