@@ -5,6 +5,7 @@ var Game_Hex = Backbone.Model.extend( {
 	    'x' : 0,
 	    'y' : 0,
 	    'height' : 0,
+	    'parent' : null,
 	},
 	'initialize' : function() {
 	    if ( this.has( '__CLASS__' ) ) {
@@ -25,6 +26,10 @@ var Game_Hex = Backbone.Model.extend( {
 
 	}
 } );
+
+var Game_Hex_View = Backbone.View.extend( {
+	
+    } );
 
 var Game_Hex_Collection = Backbone.Collection.extend( {
 	'model' : Game_Hex,

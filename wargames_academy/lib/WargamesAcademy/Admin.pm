@@ -29,6 +29,7 @@ sub map {
 	'Map' => $map,
 	'map_json' => $map->freeze(),
 	'modules' => [ 
+	    'Vector',
 	    'Game/Hex/Feature', 
 	    'Game/Hex/Vector', 
 	    'Game/Hex/Feature/River', 

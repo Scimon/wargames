@@ -5,8 +5,7 @@
 <script src="/js/backbone.js"></script>
 <script src="/js/jquery.js"></script>
 <% foreach my $script ( @{$modules} ) { %>
-<script src="/js/<%= $script %>.js"></script>
-<% } %>
+<script src="/js/<%= $script %>.js"></script><% } %>
 <script>var mapdata = <%== $map_json %>;</script>
 <style type="text/css">
 #gamemap {
@@ -37,8 +36,6 @@ position: relative; border: 1px solid #000; height: 800px; width: 800px; overflo
 <input type="button" id="down" value="\/">
 <input type="button" id="right" value="&gt;">
 </p>
-<textarea id="mapdata"></textarea>
-<input id="update" type="button" value="Update Map" />
 <div id="gamemap"></div>
 
 
@@ -46,7 +43,7 @@ position: relative; border: 1px solid #000; height: 800px; width: 800px; overflo
 $(document).ready( 
 function() {
 window.editor = new Editor( { 'mapdata' : mapdata } );
-$('#mapdata')[0].value = JSON.stringify(editor.get('mapdata'));
+
 
 //var game = new Game( 'gamemap' );
 //if ( game != null ) {
