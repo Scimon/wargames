@@ -7,6 +7,7 @@ var Game_Hex = Backbone.Model.extend( {
 	    'height' : 0,
 	    'parent' : null,
 	    'random' : null,
+	    'selected' : 0,
 	},
 	'initialize' : function() {
 	    if ( this.has( '__CLASS__' ) ) {
@@ -25,6 +26,11 @@ var Game_Hex = Backbone.Model.extend( {
 			      } );
 	    this.set('features', new Game_Hex_Feature_Collection( Data ) );
 	    this._calc_halves();
+	},
+	'random' : function() {
+	    var map = this.get('parent');
+	    var game = map.get('game');
+	    return game.Alea( this.get('x'), this.get('y'), map.get('height'), map.get('width') );
 	},
 	'_calc_halves' : function() {
 	    this._half_height = Math.round( Math.sqrt( Math.pow( this.get('parent').get('hexRadius'), 2) - 
@@ -70,12 +76,17 @@ var Game_Hex_View = Backbone.View.extend( {
 	    var ctx = this.el.getContext('2d');
 	    ctx.strokeStyle = 'rgba( 0,0,0,1 )';
 	    ctx.lineWidth = 1.5;
-	    
+
 	    ctx.save();
 	    this.follow_path( ctx, this.model.vertices() );
 	    ctx.clip();
-	    
+
 	    this.model.get('hextype').draw( ctx, this.model );
+
+	    if ( this.model.get('selected') ) {
+		ctx.fillStyle = 'rgba( 255,0,0,0.25 )';
+		ctx.fillRect(0,0,width,height);
+	    }
 
 	    ctx.restore();
 	    this.follow_path( ctx, this.model.vertices() );
@@ -92,8 +103,7 @@ var Game_Hex_View = Backbone.View.extend( {
 		ctx.lineTo( point.get('x'), point.get('y') );
 	    }
 	    ctx.lineTo( point1.get('x'), point1.get('y') );
-	}
-	    
+	},    
     } );
 
 var Game_Hex_Collection = Backbone.Collection.extend( {

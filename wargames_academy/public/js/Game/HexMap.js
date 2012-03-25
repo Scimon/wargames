@@ -22,7 +22,6 @@ var Game_HexMap = Backbone.Model.extend( {
 	    var Data = _.map( this.get('hexes'), 
 			      function( hex ) { 
 				  hex.parent = this;
-				  hex.random = this.get('game').Alea( hex.x, hex.y );
 				  return new Game_Hex( hex );
 			      }, this );
 	    var collection = new Game_Hex_Collection( Data );
@@ -52,44 +51,69 @@ var Game_HexMap = Backbone.Model.extend( {
 	},
 	'_hex_link' : {},
 	'find_hex' : function ( point ) {
-	    // var x = point.get('x');
-	    // var y = point.get('y');
-	    // 		var hor = [ ( ( y - origin[1] ) - ( ( y - origin[1] ) % height ) + origin[1] )];
-	    // 		hor[1] = ( y < origin[1] ? hor[0] - height : hor[0] + height );
-	    // 		var ver = [	( ( x - origin[0] ) - ( ( x - origin[0] ) % ( radius / 2 ) ) + origin[0] ) ];
-	    // 		ver[1] = ( x < origin[0] ? ver[0] - radius / 2 : ver[0] + radius / 2 );
-	    // 		ver[2] = ( x < origin[0] ? ( ver[0] + ( radius / 2 ) ) : ( ver[0] - ( radius / 2 ) ) );
-	    // 		var h = [];
-	    // 		var d = [];
-	    // 		var di = [];
-	    // 		if ( x >= origin[0] && y < origin[1] ) { d = [[1,-1],[1,0]];  }
-	    // 		if ( x < origin[0] && y < origin[1] ) { d = [[-1,0],[-1,1]];}
-	    // 		if ( x >= origin[0] && y >= origin[1] ) { d = [[1,0],[1,-1]]; }
-	    // 		if ( x < origin[0] && y >= origin[1] ) { d = [[-1,1],[-1,0]];}
-	    // 		for ( var j = 0; j < 3; j++ ) { ver[j] = Math.round(ver[j]) }
-	    // 		for ( var i = 0; i < 2; i++ ) {
-	    // 			hor[i] = Math.round(hor[i]);
-	    // 			for ( var c = 0; c < 3; c++ ) {
-	    // 				var hx = this.point_to_hex([ver[c],hor[i]]);
-	    // 				var check = this.hex_to_point(hx);
-	    // 				if ( check[0] == ver[c] && check[1] == hor[i] ) {
-	    // 					if ( c < 2 ) { 
-	    // 						return hx;
-	    // 					} else {
-	    // 						h[0] = hx;
-	    // 						h[1] = [0+h[0][0]+d[i][0],0+h[0][1]+d[i][1]];
-	    // 					}
-	    // 				}
-	    // 			}	
-	    // 		}
-	    // 		if ( h.length == 0 ) { return null }	
-	    // 		for ( var i = 0; i < 2; i++ ) {
-	    // 			var t = this.hex_to_point(h[i]);
-	    // 			di[i] = Math.sqrt(((x-t[0])*(x-t[0]))+((y-t[1])*(y-t[1])));
-	    // 		}
-	    // 		return di[0] < di[1] ? h[0] : h[1];
-		}		
+	    var x = point.get('x');
+	    var y = point.get('y');
+	    var half_height = Math.round( Math.sqrt( Math.pow( this.get('hexRadius'), 2) - 
+						     Math.pow( this.get('hexRadius') /2 ,2)) );
+	    var half_width = this.get('hexRadius');
 
+	    var ver = [ ( ( y - half_height ) - ( ( y - half_height ) % half_height ) + half_height )];
+	    ver[1] = ( y < half_height ? ver[0] - half_height : ver[0] + half_height );
+	    var hor = [	( ( x - half_width ) - ( ( x - half_width ) % ( half_width / 2 ) ) + half_width ) ];
+	    hor[1] = ( x < half_width ? hor[0] - half_width / 2 : hor[0] + half_width / 2 );
+	    hor[2] = ( x < half_width ? ( hor[0] + ( half_width / 2 ) ) : ( hor[0] - ( half_width / 2 ) ) );
+	    var h = [];
+	    var d = [];
+	    var di = [];
+	    if ( x >= half_width && y < half_height ) { d = [[1,-1],[1,0]];  }
+	    if ( x < half_width && y < half_height ) { d = [[-1,0],[-1,1]];}
+	    if ( x >= half_width && y >= half_height ) { d = [[1,0],[1,-1]]; }
+	    if ( x < half_width && y >= half_height ) { d = [[-1,1],[-1,0]];}
+	    for ( var j = 0; j < 3; j++ ) { hor[j] = Math.round(hor[j]) }
+	    for ( var i = 0; i < 2; i++ ) {
+		ver[i] = Math.round(ver[i]);
+		for ( var c = 0; c < 3; c++ ) {
+		    var hx = this.point_to_hex( 0 + hor[c], 0 + ver[i]);
+		    var check = this.hex_to_point(hx.get('x'),hx.get('y'));
+		    
+		    if ( check.get('x') == hor[c] && check.get('y') == ver[i] ) {
+			if ( c < 2 ) { 
+			    return this.hex_at( hx.get('x'), hx.get('y') );
+			} else {
+			    h[0] = [hx.get('x'),hx.get('y')];
+			    h[1] = [hx.get('x') + d[i][0] ,hx.get('y') +d[i][1]];
+			}
+		    }
+		}	
+	    }
+	    if ( h.length == 0 ) { return null }	
+	    for ( var i = 0; i < 2; i++ ) {
+		var cy = half_height + ( h[1] * 2 * half_height ) + ( h[0] * half_height );
+		var cx = half_width + ( h[0] * 1.5 * half_width );
+		di[i] = Math.sqrt(((x-cx)*(x-cx))+((y-cy)*(y-cy)));
+	    }
+	    if ( di[0] < di[1] ) {
+		return this.hex_at( h[0][0], h[0][1] );
+	    } else {
+		return this.hex_at( h[1][0], h[1][1] );
+	    }	
+	},
+	'point_to_hex' : function ( x, y ) {
+	    var half_height = Math.round( Math.sqrt( Math.pow( this.get('hexRadius'), 2) - 
+						     Math.pow( this.get('hexRadius') /2 ,2)) );
+	    var half_width = this.get('hexRadius');
+	    var cx = Math.round( ( x - half_width ) / ( 1.5 * half_width ) );
+	    var cy = Math.round( ( ( y - half_height ) - ( cx * half_height ) ) / ( 2 * half_height ) );
+	    return new Vector( { 'x' : cx, 'y' : cy } );
+	},
+	'hex_to_point' : function( x, y ) {
+	    var half_height = Math.round( Math.sqrt( Math.pow( this.get('hexRadius'), 2) - 
+						     Math.pow( this.get('hexRadius') /2 ,2)) );
+	    var half_width = this.get('hexRadius');
+	    var cx = half_width + ( x * 1.5 * half_width );
+	    var cy = half_height + ( y * 2 * half_height ) + ( x * half_height );
+	    return new Vector( { 'x' : cx, 'y' : cy } )
+	}
     } );
 
 var Game_HexMap_View = Backbone.View.extend( {
@@ -111,6 +135,16 @@ var Game_HexMap_View = Backbone.View.extend( {
 		this);
 	    return this;
 	},
+	'events' : {
+	    'click' : 'select_hex',
+	},
+	'select_hex' : function(e) {
+	    var position = $(this.el).offset();
+	    var x = Math.round( e.pageX - position.left );
+	    var y = Math.round( e.pageY - position.top);
+	    var hex = this.model.find_hex( new Vector( { 'x' : x, 'y': y } ) );
+	    this.model.get( 'game' ).select_hex( hex );
+	},
 	'_hex_views' : [],
 	'initialize' : function() {
 	    var hexes = this.model.get('hexes');
@@ -118,6 +152,7 @@ var Game_HexMap_View = Backbone.View.extend( {
 	    hexes.each( function( hex, index ) {
 	    	    this._hex_views.push( new Game_Hex_View( { 'model' : hex } ) );
 	    	}, this );
+	    hexes.on( 'change', this.render, this );
 	    this.model.on( 'change', this.render, this );
 	}
     } );

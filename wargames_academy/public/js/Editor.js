@@ -1,5 +1,14 @@
 var Editor = Game.extend( {
-
+	'select_hex' : function( hex ) {
+	    if ( this.get('selected') ) {
+		this.get('selected').set('selected',0);
+	    }
+	    this.set( 'selected', hex );
+	    if ( hex ) {
+		hex.set( 'selected', 1 );
+	    }
+	},
+	
     } );
 
 $(document).ready( 

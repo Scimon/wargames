@@ -2,16 +2,26 @@
 var Game = Backbone.Model.extend( {
 	'defaults' : {
 	    'mapdata' : {},
+	    'selected' : null,
 	},
-	'makeFrom' : function( obj ) {
+	'select_hex' : function( hex ) {
+	    if ( this.get('hex') ) {
+		this.get('hex').set('selected',0);
+	    }
+	    this.set( 'selected', hex );
+	    if ( hex ) {
+		hex.set( 'selected', 1 );
+	    }
+	},
+	'make_from' : function( obj ) {
 	    if ( _.isArray( obj ) ) {
-		return _.map( obj, this.makeFrom, this );
+		return _.map( obj, this.make_from, this );
 	    }
 	    if ( _.isObject( obj ) && _.has( obj, '__CLASS__' ) ) {
 		var className = obj.__CLASS__.replace( /::/g, '_' );
 		delete obj.__CLASS__;
 		for ( var key in obj ) {
-		    obj[key] = this.makeFrom( obj[key] );
+		    obj[key] = this.make_from( obj[key] );
 		}
 		return new window[className]( obj );
 	    }
