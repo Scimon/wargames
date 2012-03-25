@@ -22,6 +22,7 @@ var Game_HexMap = Backbone.Model.extend( {
 	    var Data = _.map( this.get('hexes'), 
 			      function( hex ) { 
 				  hex.parent = this;
+				  hex.random = this.get('game').Alea( hex.x, hex.y );
 				  return new Game_Hex( hex );
 			      }, this );
 	    var collection = new Game_Hex_Collection( Data );
@@ -37,6 +38,9 @@ var Game_HexMap = Backbone.Model.extend( {
 	},
 	'_update_hexRadius' : function() {
 	    this.set( 'hexRadius', this.get( 'radius' ) * this.get('scale') );
+	    this.get('hexes').each( function( hex ) {
+		    hex._calc_halves();
+		}, this );
 	},
 	'hexAt' : function( x, y ) {
 	    if ( ! _.isUndefined( this._hex_link[x] ) ) {
