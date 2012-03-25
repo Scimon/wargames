@@ -42,7 +42,7 @@ var Game_HexMap = Backbone.Model.extend( {
 		    hex._calc_halves();
 		}, this );
 	},
-	'hexAt' : function( x, y ) {
+	'hex_at' : function( x, y ) {
 	    if ( ! _.isUndefined( this._hex_link[x] ) ) {
 		if ( ! _.isUndefined( this._hex_link[x][y] ) ) {
 		    return this._hex_link[x][y]
@@ -51,6 +51,45 @@ var Game_HexMap = Backbone.Model.extend( {
 	    return null;
 	},
 	'_hex_link' : {},
+	'find_hex' : function ( point ) {
+	    // var x = point.get('x');
+	    // var y = point.get('y');
+	    // 		var hor = [ ( ( y - origin[1] ) - ( ( y - origin[1] ) % height ) + origin[1] )];
+	    // 		hor[1] = ( y < origin[1] ? hor[0] - height : hor[0] + height );
+	    // 		var ver = [	( ( x - origin[0] ) - ( ( x - origin[0] ) % ( radius / 2 ) ) + origin[0] ) ];
+	    // 		ver[1] = ( x < origin[0] ? ver[0] - radius / 2 : ver[0] + radius / 2 );
+	    // 		ver[2] = ( x < origin[0] ? ( ver[0] + ( radius / 2 ) ) : ( ver[0] - ( radius / 2 ) ) );
+	    // 		var h = [];
+	    // 		var d = [];
+	    // 		var di = [];
+	    // 		if ( x >= origin[0] && y < origin[1] ) { d = [[1,-1],[1,0]];  }
+	    // 		if ( x < origin[0] && y < origin[1] ) { d = [[-1,0],[-1,1]];}
+	    // 		if ( x >= origin[0] && y >= origin[1] ) { d = [[1,0],[1,-1]]; }
+	    // 		if ( x < origin[0] && y >= origin[1] ) { d = [[-1,1],[-1,0]];}
+	    // 		for ( var j = 0; j < 3; j++ ) { ver[j] = Math.round(ver[j]) }
+	    // 		for ( var i = 0; i < 2; i++ ) {
+	    // 			hor[i] = Math.round(hor[i]);
+	    // 			for ( var c = 0; c < 3; c++ ) {
+	    // 				var hx = this.point_to_hex([ver[c],hor[i]]);
+	    // 				var check = this.hex_to_point(hx);
+	    // 				if ( check[0] == ver[c] && check[1] == hor[i] ) {
+	    // 					if ( c < 2 ) { 
+	    // 						return hx;
+	    // 					} else {
+	    // 						h[0] = hx;
+	    // 						h[1] = [0+h[0][0]+d[i][0],0+h[0][1]+d[i][1]];
+	    // 					}
+	    // 				}
+	    // 			}	
+	    // 		}
+	    // 		if ( h.length == 0 ) { return null }	
+	    // 		for ( var i = 0; i < 2; i++ ) {
+	    // 			var t = this.hex_to_point(h[i]);
+	    // 			di[i] = Math.sqrt(((x-t[0])*(x-t[0]))+((y-t[1])*(y-t[1])));
+	    // 		}
+	    // 		return di[0] < di[1] ? h[0] : h[1];
+		}		
+
     } );
 
 var Game_HexMap_View = Backbone.View.extend( {
@@ -59,7 +98,7 @@ var Game_HexMap_View = Backbone.View.extend( {
 	    'class' : 'game-layer',
 	},
 	'render' : function() {
-	    var bottom = this.model.hexAt( this.model.get('width') - 1, this.model.get('height') - Math.floor( ( this.model.get('width') ) / 2 ) );
+	    var bottom = this.model.hex_at( this.model.get('width') - 1, this.model.get('height') - Math.floor( ( this.model.get('width') ) / 2 ) );
 	    var box = bottom.box();
 	    $('.game-layer').css('width',box.bottom_right.get('x') + 'px').css('height',box.bottom_right.get('y') + 'px' );
 	    $(this.el).attr( 'width',box.bottom_right.get('x') ).attr( 'height',box.bottom_right.get('y') );

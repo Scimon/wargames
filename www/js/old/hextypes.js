@@ -42,7 +42,7 @@ var Types = function() {
                 var base = 130;
 		if ( details.h != null ) {
 			if ( details.h <= 0 ) { // Water in here.
-				ctx.fillStyle = 'rgb( 0, ' + ( 80 + ( details.h * 40 ) ) + ', 0 )';
+			    ctx.fillStyle = 'rgb( 0, ' + ( 80 + ( details.h * 40 ) ) + ', 0 )';
 				base = 110 + ( details.h * 40 );				
 			} else {
 				ctx.fillStyle = 'rgb( 0, ' + ( 80 + ( details.h * 40 ) ) + ', 0 )';
