@@ -4,7 +4,7 @@
 	use Moose;
 	use Game::Hex::Type::Grass;
 
-	my %types = map { $_ => "Game::Hex::Type::$_" } qw( Grass );
+	my %types = map { $_ => "Game::Hex::Type::$_" } qw( Grass Water Wood Forest Town Rocky Arid );
 
 	sub make {
 		my $self = shift;
