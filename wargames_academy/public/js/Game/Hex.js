@@ -85,7 +85,7 @@ var Game_Hex_View = Backbone.View.extend( {
 
 	    if ( this.model.get('selected') ) {
 			this.greyscale( ctx, width, height );
-			ctx.fillStyle = 'rgba( 128,0,0,0.25 )';
+			ctx.fillStyle = 'rgba( 255,0,0,0.25 )';
 			ctx.fillRect(0,0,width,height);
 	    }
 
