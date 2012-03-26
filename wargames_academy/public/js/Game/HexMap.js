@@ -152,9 +152,10 @@ var Game_HexMap_View = Backbone.View.extend( {
 	    this._hex_views = [];
 	    hexes.each( function( hex, index ) {
 			var hex_view = new Game_Hex_View( { 'model' : hex } );
-	    	    this._hex_views.push( hex_view );
+	    	this._hex_views.push( hex_view );
+			hex.on( 'change', function( view ) { return function() { this.render_part( view ) } }(hex_view), this );
 	    	}, this );
-	    hexes.on( 'change', this.render, this );
+	    //hexes.on( 'change', this.render, this );
 	    this.model.on( 'change', this.render, this );
 	}
     } );
