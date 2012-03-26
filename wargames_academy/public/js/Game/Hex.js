@@ -84,7 +84,7 @@ var Game_Hex_View = Backbone.View.extend( {
 	    this.model.get('hextype').draw( ctx, this.model );
 
 	    if ( this.model.get('selected') ) {
-			this.greyscale( ctx, width, height );
+			this.greyscale( ctx, width, height, 255 );
 			ctx.fillStyle = 'rgba( 255,0,0,0.25 )';
 			ctx.fillRect(0,0,width,height);
 	    }
@@ -95,13 +95,16 @@ var Game_Hex_View = Backbone.View.extend( {
 
 	    return this;
 	},
-	'greyscale' : function(ctx,width,height) {
+	'greyscale' : function(ctx,width,height,weight = null) {
 		var imgPixels = ctx.getImageData(0, 0, width, height);
 
 		for( var y = 0; y < imgPixels.height; y++){
 			for( var x = 0; x < imgPixels.width; x++){
 				var i = (y * 4) * imgPixels.width + x * 4;
 				var avg = (imgPixels.data[i] + imgPixels.data[i + 1] + imgPixels.data[i + 2]) / 3;
+				if ( ! _.isNull( weight ) ) {
+					avg = ( avg + weight ) / 2;
+				}
 				imgPixels.data[i] = avg;
 				imgPixels.data[i + 1] = avg;
 				imgPixels.data[i + 2] = avg;
