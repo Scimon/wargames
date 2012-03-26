@@ -150,7 +150,8 @@ var Game_HexMap_View = Backbone.View.extend( {
 	    var hexes = this.model.get('hexes');
 	    this._hex_views = [];
 	    hexes.each( function( hex, index ) {
-	    	    this._hex_views.push( new Game_Hex_View( { 'model' : hex } ) );
+			var hex_view = new Game_Hex_View( { 'model' : hex } );
+	    	    this._hex_views.push( hex_view );
 	    	}, this );
 	    hexes.on( 'change', this.render, this );
 	    this.model.on( 'change', this.render, this );
