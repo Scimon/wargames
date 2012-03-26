@@ -95,7 +95,7 @@ var Game_Hex_View = Backbone.View.extend( {
 
 	    return this;
 	},
-	'greyscale' : function(ctx,width,height,weight = null) {
+	'greyscale' : function(ctx,width,height,weight) {
 		var imgPixels = ctx.getImageData(0, 0, width, height);
 
 		for( var y = 0; y < imgPixels.height; y++){
