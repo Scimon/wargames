@@ -127,13 +127,14 @@ var Game_HexMap_View = Backbone.View.extend( {
 	    $('.game-layer').css('width',box.bottom_right.get('x') + 'px').css('height',box.bottom_right.get('y') + 'px' );
 	    $(this.el).attr( 'width',box.bottom_right.get('x') ).attr( 'height',box.bottom_right.get('y') );
 	    var ctx = this.el.getContext('2d');
-	    _.each( this._hex_views,function( view ) {
-		    var canvas = view.render().el;
-		    var box = view.model.box();
-		    ctx.drawImage( canvas, box.top_left.get('x'), box.top_left.get('y') );
-		}, 
-		this);
+	    _.each( this._hex_views, function( view ) { this.render_part( view, ctx ) }, this);
 	    return this;
+	},
+	'render_part' : function( view, ctx ) {
+		if ( ! ctx ) { ctx = this.el.getContext('2d'); }
+		var canvas = view.render().el;
+		var box = view.model.box();
+		ctx.drawImage( canvas, box.top_left.get('x'), box.top_left.get('y') );
 	},
 	'events' : {
 	    'click' : 'select_hex',
