@@ -5,6 +5,7 @@
 	use Game::Hex::Type::Grass;
 	use Game::Hex::Type::Water;
 	use Game::Hex::Type::Forest;
+	use Game::Hex::Type::Wood;
 	use Game::Hex::Type::Town;	
 	use Game::Hex::Type::Rocky;
 	use Game::Hex::Type::Arid;
