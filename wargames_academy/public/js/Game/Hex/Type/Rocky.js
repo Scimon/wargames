@@ -9,13 +9,13 @@ var Game_Hex_Type_Rocky = Game_Hex_Type.extend( {
 	    var base = 110 + ( land_height * 40 );
 	    ctx.fillRect(0,0,width,height);
 	    for ( var g = base; g > base - 50; g = g - 10 ) {
-		ctx.fillStyle = 'rgba( ' + g + ', ' + g + ', ' + g +', 0.08 )';
-		ctx.beginPath();
-		var rad = Math.floor( ( random() * ( height / 2 ) ) + ( height / 4 ) );
-		var cx = Math.floor( random() * ( width - ( rad * 2 ) ) ) + rad; 
-		var cy = Math.floor( random() * ( height - ( rad * 2 ) ) ) + rad; 
-		ctx.arc( cx, cy, rad, 0 , Math.PI * 2, false );
-		ctx.fill();
-
+			ctx.fillStyle = 'rgba( ' + g + ', ' + g + ', ' + g +', 0.08 )';
+			ctx.beginPath();
+			var rad = Math.floor( ( random() * ( height / 2 ) ) + ( height / 4 ) );
+			var cx = Math.floor( random() * ( width - ( rad * 2 ) ) ) + rad; 
+			var cy = Math.floor( random() * ( height - ( rad * 2 ) ) ) + rad; 
+			ctx.arc( cx, cy, rad, 0 , Math.PI * 2, false );
+			ctx.fill();
+		}
 	}
-}
+} );
