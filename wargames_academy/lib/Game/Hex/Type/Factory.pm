@@ -9,8 +9,13 @@
 	use Game::Hex::Type::Town;	
 	use Game::Hex::Type::Rocky;
 	use Game::Hex::Type::Arid;
+	
+	my @typelist = qw( Grass Water Wood Forest Town Rocky Arid );
+	my %types = map { $_ => "Game::Hex::Type::$_" } @typelist;
 
-	my %types = map { $_ => "Game::Hex::Type::$_" } qw( Grass Water Wood Forest Town Rocky Arid );
+	sub types_available {
+	    return @typelist;
+	}
 
 	sub make {
 		my $self = shift;

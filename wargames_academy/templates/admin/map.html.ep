@@ -11,6 +11,13 @@
 #gamemap {
 position: relative; border: 1px solid #000; height: 800px; width: 800px; overflow: hidden; background: #000;
 }
+#hex_editor {
+  float:right;
+  width:300px;
+  border: 1px solid #000;
+  display:none;
+  padding: 5px;
+}
 .back { background: #fff }
 .game-layer{ position: absolute; }
 #mapdata { float: right; width: 300px; height: 300px; }
@@ -36,6 +43,7 @@ position: relative; border: 1px solid #000; height: 800px; width: 800px; overflo
 <input type="button" id="down" value="\/">
 <input type="button" id="right" value="&gt;">
 </p>
+<div id="hex_editor"></div>
 <div id="gamemap"></div>
 
 
@@ -51,3 +59,10 @@ position: relative; border: 1px solid #000; height: 800px; width: 800px; overflo
 //$('#right').click( function() { game.movePosition( 1, 0 ); } );
 </script>
 
+<script type="text/template" id="hex_editor_template">
+<p>Hex Type : <select id="type_list"><% foreach my $type ( @{$types} ) { %><option><%= $type %></option>
+<% } %>
+</select>
+</p>
+<p>Height : <%%= height %></p>
+</script>

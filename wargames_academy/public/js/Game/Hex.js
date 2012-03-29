@@ -27,6 +27,10 @@ var Game_Hex = Backbone.Model.extend( {
 	    this.set('features', new Game_Hex_Feature_Collection( Data ) );
 	    this._calc_halves();
 	},
+	'setHex' : function(type) {
+	    var className = 'Game_Hex_Type_' + type;
+	    this.set('hextype', new window[className]( { 'name' : type } ) );
+	},
 	'random' : function() {
 	    var map = this.get('parent');
 	    var game = map.get('game');

@@ -23,11 +23,14 @@ sub map {
     my $id = $self->stash( 'id' );
     my $map = new Game::HexMap( 'id' => $id );
     $map->load();
-    
+    my $type_fac = new Game::Hex::Type::Factory();
+    my @type_modules = map { "Game/Hex/Type/$_" } $type_fac->types_available();
+
     $self->stash( 
 	'title' => 'Edit : ' . $map->name(), 
 	'Map' => $map,
 	'map_json' => $map->freeze(),
+	'types' => [ $type_fac->types_available() ],
 	'modules' => [ 
 	    'Vector',
 	    'Game/Hex/Feature', 
@@ -35,13 +38,7 @@ sub map {
 	    'Game/Hex/Feature/River', 
 	    'Game/Hex/Feature/Slope', 
 	    'Game/Hex/Type', 
-	    'Game/Hex/Type/Grass',
-		'Game/Hex/Type/Water',
-		'Game/Hex/Type/Wood',
-		'Game/Hex/Type/Forest', 
-		'Game/Hex/Type/Town',
-		'Game/Hex/Type/Rocky',
-		'Game/Hex/Type/Arid',
+	    @type_modules,
 	    'Game/Hex', 	  
 	    'Game/HexMap', 
 	    'Game', 
