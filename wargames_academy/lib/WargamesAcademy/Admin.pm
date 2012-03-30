@@ -25,32 +25,49 @@ sub map {
     my $self = shift;
     return $self->redirect_to('/system_login') unless $self->session('user');
 
-    my $id = $self->stash( 'id' );
-    my $map = new Game::HexMap( 'id' => $id, load => 1 );
-    my $type_fac = new Game::Hex::Type::Factory();
-    my @type_modules = map { "Game/Hex/Type/$_" } $type_fac->types_available();
+	my $req = $self->request();
 
-    $self->stash( 
-	'title' => 'Edit : ' . $map->name(), 
-	'Map' => $map,
-	'map_json' => $map->freeze(),
-	'types' => [ $type_fac->types_available() ],
-	'modules' => [ 
-	    'Vector',
-	    'Game/Hex/Feature', 
-	    'Game/Hex/Vector', 
-	    'Game/Hex/Feature/River', 
-	    'Game/Hex/Feature/Slope', 
-	    'Game/Hex/Type', 
-	    @type_modules,
-	    'Game/Hex', 	  
-	    'Game/HexMap', 
-	    'Game', 
-	    'Editor',
-	] 
-	);
-    
-    $self->render;
+	if ( $req->method() eq 'POST' ) {
+		my $map = new Game::HexMap();
+		$map->make_map( $self->stash('height'), $self->stash('width'), 'Grass' );
+		$map->name( $self->stash('name') );
+		$map->save();
+		return $self->redirect_to('/admin/map/'.$map->id());
+	}
+
+	if ( $req->is_xhr ) {
+		if ( $req->method() eq 'PUT' ) {
+			# Edit request goes here
+		}
+		
+	} else {
+		my $id = $self->stash( 'id' );
+		my $map = new Game::HexMap( 'id' => $id, load => 1 );
+		my $type_fac = new Game::Hex::Type::Factory();
+		my @type_modules = map { "Game/Hex/Type/$_" } $type_fac->types_available();
+		
+		$self->stash( 
+			'title' => 'Edit : ' . $map->name(), 
+			'Map' => $map,
+			'map_json' => $map->freeze(),
+			'types' => [ $type_fac->types_available() ],
+			'modules' => [ 
+				'Vector',
+				'Game/Hex/Feature', 
+				'Game/Hex/Vector', 
+				'Game/Hex/Feature/River', 
+				'Game/Hex/Feature/Slope', 
+				'Game/Hex/Type', 
+				@type_modules,
+				'Game/Hex', 	  
+				'Game/HexMap', 
+				'Game', 
+				'Editor',
+			] 
+			);
+		
+		$self->render;
+	}
 }
 
 sub maps {
