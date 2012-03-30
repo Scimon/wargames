@@ -2,8 +2,8 @@
 	package Game::Hex;
 	
 	use Moose;
-	use Game::Hex::Type;
-	use Game::Hex::Feature;
+	use Game::Hex::Type::Factory;
+	use Game::Hex::Feature::Factory;
 	use JSON;
 	use MooseX::Storage;
     use Database;
@@ -34,6 +34,40 @@
 
 		foreach my $feature ( $self->feature_list() ) {
 			$feature->apply( $self );
+		}
+	}
+
+	sub BUILD {
+		my $self = shift;
+		my $args = shift;
+		
+		if ( $args->{load} ) {
+			delete $args->{load};
+			$self->load( $args->{map_id}, $args->{x}, $args->{y} );
+		}
+	}
+	
+	sub load {
+		my $self = shift;
+		my ( $map_id, $x, $y ) = @_;
+		my $dbh = Database::connection();
+
+		$self->map_id($map_id);
+		$self->x($x);
+		$self->y($y);
+		
+		my $type_fac = new Game::Hex::Type::Factory();
+		my $feature_fac = new Game::Hex::Feature::Factory();
+		
+		my $sth = $dbh->prepare( "SELECT x,y,hextype,features FROM hex WHERE map_id = ?" );
+		$sth->execute( $self->map_id() );
+						
+		if ( my $row = $sth->fetchrow_hashref() ) {
+			$self->hextype( $type_fac->make( $row->{'hextype'} ) );
+			my $features = decode_json( $row->{'features'} );
+			foreach my $json ( @{$features} ) {
+				$self->add_feature( $feature_fac->thaw( $json ) );
+			}		
 		}
 	}
 

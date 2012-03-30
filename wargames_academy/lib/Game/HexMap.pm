@@ -68,19 +68,11 @@
 			my @data = $dbh->selectrow_array( "SELECT name FROM hexmap WHERE id = ?",undef, $self->id() );
 			$self->name( $data[0] );
 			
-			my $sth = $dbh->prepare( "SELECT x,y,hextype,features FROM hex WHERE map_id = ?" );
+			my $sth = $dbh->prepare( "SELECT x,y FROM hex WHERE map_id = ?" );
 			$sth->execute( $self->id() );
 			
-			my $type_fac = new Game::Hex::Type::Factory();
-			my $feature_fac = new Game::Hex::Feature::Factory();
-			
 			while ( my $row = $sth->fetchrow_hashref() ) {
-				my $type = $type_fac->make( $row->{'hextype'} );
-				my $hex = new Game::Hex( 'x' => $row->{'x'}, 'y' => $row->{'y'}, 'map_id' => $self->id(), 'hextype' => $type );
-				my $features = decode_json( $row->{'features'} );
-				foreach my $json ( @{$features} ) {
-					$hex->add_feature( $feature_fac->thaw( $json ) );
-				}
+				my $hex = new Game::Hex({ 'load' => 1, 'x' => $row->{'x'}, 'y' => $row->{'y'}, 'map_id' => $self->id()});
 				$self->add_hex( $hex );
 			}
 		}
