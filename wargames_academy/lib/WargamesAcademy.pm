@@ -20,8 +20,8 @@ sub startup {
 
   # Default Route
 #  $r->route('/admin/map/:id')->to( 'Admin#map', id => 0 );
-#  $r->route('/admin/map/:id/:method')->to( 'Admin#map', id => 0 );
-  $r->route('/:controller/:action/:id')->to('site#index', id => 1);
+  $r->route('/admin/map/:id/:x/:y', 'x' => /^\d+$/, 'y' => /^\d+$/ )->to( 'Admin#hex', 'id' => 0, 'x' => 0, 'y' => 0  );
+  $r->route('/:controller/:action/:id', 'id' => /^\d+$/ )->to('site#index', id => 1 );
 }
 
 1;

@@ -42,6 +42,17 @@
 	    }
 	}
     }
+
+	sub BUILD {
+		my $self = shift;
+		my $args = shift;
+		
+		if ( $args->{load} ) {
+			delete $args->{load};
+			$self->id( $args->{id} );
+			$self->load();
+		}
+	}
     
     sub save {
 	my $self = shift;

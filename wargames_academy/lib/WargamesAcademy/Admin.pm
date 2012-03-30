@@ -16,6 +16,10 @@ sub index {
     $self->render;
 }
 
+sub hex {
+	my $self = shift;
+}
+
 sub map {
     my $self = shift;
     return $self->redirect_to('/system_login') unless $self->session('user');
