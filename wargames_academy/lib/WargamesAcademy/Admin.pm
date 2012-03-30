@@ -18,6 +18,7 @@ sub index {
 
 sub hex {
 	my $self = shift;
+    return $self->redirect_to('/system_login') unless $self->session('user');
 }
 
 sub map {
@@ -25,8 +26,7 @@ sub map {
     return $self->redirect_to('/system_login') unless $self->session('user');
 
     my $id = $self->stash( 'id' );
-    my $map = new Game::HexMap( 'id' => $id );
-    $map->load();
+    my $map = new Game::HexMap( 'id' => $id, load => 1 );
     my $type_fac = new Game::Hex::Type::Factory();
     my @type_modules = map { "Game/Hex/Type/$_" } $type_fac->types_available();
 
