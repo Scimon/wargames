@@ -5,9 +5,14 @@ var Game_Hex = Backbone.Model.extend( {
 	    'x' : 0,
 	    'y' : 0,
 	    'height' : 0,
-	    'parent' : null,
+	    'map_height' : 0,
+	    'map_width' : 0,
+	    'hexRadius' : 0,
 	    'random' : null,
 	    'selected' : 0,
+	},
+	'url' : function() {
+	    return this.get('url');
 	},
 	'initialize' : function() {
 	    if ( this.has( '__CLASS__' ) ) {
@@ -25,21 +30,22 @@ var Game_Hex = Backbone.Model.extend( {
 				  return new window[className]( obj ); 
 			      } );
 	    this.set('features', new Game_Hex_Feature_Collection( Data ) );
+	    this.set('id', this.get('map_id') + '/' + this.get('x') + '/' + this.get('y') );
 	    this._calc_halves();
+	    this.on('change:hexRadius', this._calc_halves, this );
 	},
-	'setHex' : function(type) {
+	'setHexType' : function(type) {
 	    var className = 'Game_Hex_Type_' + type;
-	    this.set('hextype', new window[className]( { 'name' : type } ) );
+	    var newType = new window[className]( { 'name' : type } );
+	    this.save({'hextype' : newType});
 	},
 	'random' : function() {
-	    var map = this.get('parent');
-	    var game = map.get('game');
-	    return game.Alea( this.get('x'), this.get('y'), map.get('height'), map.get('width') );
+	    return globalFunctions.Alea( this.get('x'), this.get('y'), this.get('map_height'), this.get('map_width') );
 	},
 	'_calc_halves' : function() {
-	    this._half_height = Math.round( Math.sqrt( Math.pow( this.get('parent').get('hexRadius'), 2) - 
-						       Math.pow( this.get('parent').get('hexRadius') /2 ,2)) );
-	    this._half_width = Math.round( this.get('parent').get('hexRadius') );
+	    this._half_height = Math.round( Math.sqrt( Math.pow( this.get('hexRadius'), 2) - 
+						       Math.pow( this.get('hexRadius') /2 ,2)) );
+	    this._half_width = Math.round( this.get('hexRadius') );
 	},
 	'center' : function () {
 	    var y = this._half_height + ( this.get('y') * 2 * this._half_height ) + ( this.get('x') * this._half_height );
@@ -131,6 +137,7 @@ var Game_Hex_View = Backbone.View.extend( {
 
 var Game_Hex_Collection = Backbone.Collection.extend( {
 	'model' : Game_Hex,
+	'url' : function() { return '' },
 	'initialize' : function() {	    
 	}
     });

@@ -1,1 +1,1 @@
-backbone-min.js
+backbone-full.js

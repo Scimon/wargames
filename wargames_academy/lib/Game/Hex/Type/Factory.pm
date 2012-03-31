@@ -21,8 +21,10 @@
 		my $self = shift;
 		my $type = shift;
 
-		if ( ref( $type ) ) {
-			$type = $type->name();
+		if ( ref( $type ) eq ref( {} ) ) {
+		    $type = $type->{name};
+		} elsif ( ref( $type ) ) {
+		    $type = $type->name();
 		}
 
 		if ( defined $types{$type} ) {

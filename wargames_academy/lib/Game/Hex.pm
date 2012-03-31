@@ -6,7 +6,7 @@
 	use Game::Hex::Feature::Factory;
 	use JSON;
 	use MooseX::Storage;
-    use Database;
+	use Database;
 
 	with Storage('format' => 'JSON');
 
@@ -28,6 +28,14 @@
 			'map_features' => 'map',
 		},
 	);
+	has 'url', is => 'rw', isa => 'Str', 'default' => '', 'trigger' => \&_set_url;
+
+	sub _set_url {
+	    my ( $self, $url ) = @_;
+	    
+	    $url = $url . '/' . $self->x() . '/' . $self->y();
+	    $self->{url} = $url;
+	}
 	
 	sub _apply_features {
 		my $self = shift;
@@ -35,6 +43,21 @@
 		foreach my $feature ( $self->feature_list() ) {
 			$feature->apply( $self );
 		}
+	}
+
+	sub update {
+	    my ( $self, $data ) = @_;
+	    my $type_fac = new Game::Hex::Type::Factory();
+	    my $feature_fac = new Game::Hex::Feature::Factory();
+
+	    $self->url( $data->{url} );
+	    $self->height( $data->{height} );
+            $self->hextype( $type_fac->make( $data->{hextype} ) );
+	    $self->remove_features();
+	    foreach my $feature ( @{$data->{features}} ) {
+		$self->add_feature( $feature_fac->make( $feature ) );
+	    }
+	    $self->save();
 	}
 
 	sub BUILD {
@@ -59,11 +82,11 @@
 		my $type_fac = new Game::Hex::Type::Factory();
 		my $feature_fac = new Game::Hex::Feature::Factory();
 		
-		my $sth = $dbh->prepare( "SELECT x,y,hextype,features FROM hex WHERE map_id = ?" );
-		$sth->execute( $self->map_id() );
+		my $sth = $dbh->prepare( "SELECT hextype,features FROM hex WHERE map_id = ? AND x = ? and y = ?" );
+		$sth->execute( $self->map_id(), $self->x(), $self->y() );
 						
 		if ( my $row = $sth->fetchrow_hashref() ) {
-			$self->hextype( $type_fac->make( $row->{'hextype'} ) );
+		    $self->hextype( $type_fac->make( $row->{'hextype'} ) );
 			my $features = decode_json( $row->{'features'} );
 			foreach my $json ( @{$features} ) {
 				$self->add_feature( $feature_fac->thaw( $json ) );

@@ -21,7 +21,6 @@ var Game_HexMap = Backbone.Model.extend( {
 	    }
 	    var Data = _.map( this.get('hexes'), 
 			      function( hex ) { 
-				  hex.parent = this;
 				  return new Game_Hex( hex );
 			      }, this );
 	    var collection = new Game_Hex_Collection( Data );
@@ -31,6 +30,11 @@ var Game_HexMap = Backbone.Model.extend( {
 		    if ( hex.get('x') + 1 > this.get('width') ) { this.set('width',hex.get('x')+1); }
 		    if ( hex.get('y') + 1 > this.get('height') ) { this.set('height',hex.get('y')+1); }
 		}, this );
+	    collection.each( function( hex, index ) {
+		    hex.set('hexRadius', this.get('hexRadius') );
+		    hex.set('map_height', this.get('height') );
+		    hex.set('map_width', this.get('width') );
+		}, this);
 	    this.set('hexes', collection  );
 	    this.on('change:radius', this._update_hexRadius, this );
 	    this.on('change:scale', this._update_hexRadius, this );
@@ -38,6 +42,7 @@ var Game_HexMap = Backbone.Model.extend( {
 	'_update_hexRadius' : function() {
 	    this.set( 'hexRadius', this.get( 'radius' ) * this.get('scale') );
 	    this.get('hexes').each( function( hex ) {
+		    hex.set('hexRadius', this.get('hexRadius') );
 		    hex._calc_halves();
 		}, this );
 	},
@@ -127,7 +132,9 @@ var Game_HexMap_View = Backbone.View.extend( {
 	    $('.game-layer').css('width',box.bottom_right.get('x') + 'px').css('height',box.bottom_right.get('y') + 'px' );
 	    $(this.el).attr( 'width',box.bottom_right.get('x') ).attr( 'height',box.bottom_right.get('y') );
 	    var ctx = this.el.getContext('2d');
-	    _.each( this._hex_views, function( view ) { this.render_part( view, ctx ) }, this);
+	    _.each( this._hex_views, function( view ) { 
+		    this.render_part( view, ctx );
+		}, this);
 	    return this;
 	},
 	'render_part' : function( view, ctx ) {

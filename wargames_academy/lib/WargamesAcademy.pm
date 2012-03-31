@@ -19,9 +19,9 @@ sub startup {
   my $r = $self->routes;
 
   # Default Route
-#  $r->route('/admin/map/:id')->to( 'Admin#map', id => 0 );
-  $r->route('/admin/map/:id/:x/:y', 'x' => /^\d+$/, 'y' => /^\d+$/ )->to( 'Admin#hex', 'id' => 0, 'x' => 0, 'y' => 0  );
-  $r->route('/:controller/:action/:id', 'id' => /^\d+$/ )->to('site#index', id => 1 );
+  $r->route('/admin/map/:id', 'id' => qr/\d+/ )->to( 'admin#map', id => 0 );
+  $r->route('/admin/map/:id/:x/:y', 'x' => qr/-?\d+/, 'y' => qr/-?\d+/ )->to( 'admin#hex', 'id' => 0, 'x' => 0, 'y' => 0  );
+  $r->route('/:controller/:action/:id', 'id' => qr/\d+/ )->to('site#index', id => 1 );
 }
 
 1;

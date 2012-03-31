@@ -26,7 +26,18 @@
 	);
     has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { 0 };
     has 'name', is => 'rw', isa => 'Str', 'default' => sub { '' };
+    has 'url', is => 'rw', isa => 'Str', 'default' => '', 'trigger' => \&_set_url;
     
+    sub _set_url {
+	my ( $self, $url ) = @_;
+	
+	$url = $url . '/' . $self->id();
+	$self->{url} = $url;
+	foreach my $hex ( $self->hex_list() ) {
+	    $hex->url( $url );
+	}
+    }
+
     sub make_map {
 	my ( $self, $height, $width, $default_type  ) = @_;
 	my $factory = new Game::Hex::Type::Factory();
