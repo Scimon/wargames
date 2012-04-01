@@ -3,3 +3,10 @@
 <% foreach my $hex ( $collection->elements() ) { %>
    <p><a href="/admin/map/<%= $hex->id() %>"><%= $hex->name() %></a></p>
 <% } %>
+<h2>New Map</h2>
+<form action="/admin/map" method="POST">
+<p><label>Name <input name="name" type="text"></label></p>
+<p><label>Width (hexes) <input name="width" type="text" value="10"></label></p>
+<p><label>Height (hexes) <input name="height" type="text" value="10"></label></p>
+<p><input type="submit" value="Create"></p>
+</form>

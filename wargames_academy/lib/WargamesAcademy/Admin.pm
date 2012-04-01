@@ -29,7 +29,6 @@ sub hex {
     if ( $req->is_xhr ) {
 	if ( $req->method() eq 'PUT' ) {
 	    my $data = decode_json( $req->content->asset->slurp() );
-	    $self->app->log->debug( Dumper( $data ) );
 	    my $hex = new Game::Hex( { 'load' => 1, 'map_id' => $self->stash('id'), 'x' => $self->stash('x'), 'y' => $self->stash('y') } );
 	    $hex->update( $data );
 	    $self->render( json => $hex->freeze() );
@@ -46,8 +45,8 @@ sub map {
 
     if ( $req->method() eq 'POST' ) {
 	my $map = new Game::HexMap();
-	$map->make_map( $self->stash('height'), $self->stash('width'), 'Grass' );
-	$map->name( $self->stash('name') );
+	$map->make_map( $req->param('height'), $req->param('width'), 'Grass' );
+	$map->name( $req->param('name') );
 	$map->save();
 	return $self->redirect_to('/admin/map/'.$map->id());
     } else {
