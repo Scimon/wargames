@@ -9,6 +9,8 @@ var Game_HexMap = Backbone.Model.extend( {
 	    'height' : 0,
 	    'width' : 0,
 	    'game' : null,
+		'xOffset' : 0,
+		'yOffset' : 0
 	},
 	'validate' : function(attrs) {
 	    if ( attrs.scale < 1 || attrs.scale > 15 ) {
