@@ -55,6 +55,10 @@ $(document).ready(
 		      $('#gamemap').append('<div class="game-layer back"></div>');
 		      $('#gamemap').append( window.map_view.el );
 		      $('.scale').click( function() { map_editor.get('mapdata').set('scale', this.value * 1 ); } );
+			  $('#up').click( function() { var i = map_editor.get('mapdata').get( 'yOffset'); map_editor.get('mapdata').set( 'yOffset', i-1); } );
+			  $('#down').click( function() { var i = map_editor.get('mapdata').get( 'yOffset'); map_editor.get('mapdata').set( 'yOffset', i+1); } );
+			  $('#left').click( function() { var i = map_editor.get('mapdata').get( 'xOffset'); map_editor.get('mapdata').set( 'xOffset', i-1);} );
+			  $('#right').click( function() { var i = map_editor.get('mapdata').get( 'xOffset'); map_editor.get('mapdata').set( 'xOffset', i+1); } );
 		      window.map_view.render();
 		  }
 		   );
