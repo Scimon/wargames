@@ -132,12 +132,24 @@ var Game_HexMap_View = Backbone.View.extend( {
 	    var bottom = this.model.hex_at( this.model.get('width') - 1, this.model.get('height') - Math.floor( ( this.model.get('width') ) / 2 ) );
 	    var box = bottom.box();
 	    $('.game-layer').css('width',box.bottom_right.get('x') + 'px').css('height',box.bottom_right.get('y') + 'px' );
-	    $(this.el).attr( 'width',box.bottom_right.get('x') ).attr( 'height',box.bottom_right.get('y') );
+	    this.$el.attr( 'width',box.bottom_right.get('x') ).attr( 'height',box.bottom_right.get('y') );
 	    var ctx = this.el.getContext('2d');
 	    _.each( this._hex_views, function( view ) { 
 		    this.render_part( view, ctx );
 		}, this);
+		this.setPosition();
 	    return this;
+	},
+	'setPosition' : function() {
+		var wrapper_height = this.$el.offsetParent().height();
+		var wrapper_width = this.$el.offsetParent().width();
+		var bottom = this.model.hex_at( this.model.get('width') - 1, this.model.get('height') - Math.floor( ( this.model.get('width') ) / 2 ) );
+	    var box = bottom.box();
+		var map_height = box.bottom_right.get('y');
+		var map_width = box.bottom_right.get('x');
+		var offset_left = Math.round( ( wrapper_width - map_width ) / 2 ) + ( this.model.get('xOffset') * this.model.get('hexRadius') );
+		var offset_top = Math.round( ( wrapper_height - map_height ) / 2 ) + ( this.model.get('yOffset') * this.model.get('hexRadius') );
+		$('.game-layer').css('left', offset_left + 'px').css('top', offset_top + 'px' );
 	},
 	'render_part' : function( view, ctx ) {
 		if ( ! ctx ) { ctx = this.el.getContext('2d'); }
