@@ -12,8 +12,8 @@ var Game_Hex_Type_Town = Game_Hex_Type.extend( {
 		ctx.strokeStyle = 'rgba( 0, 0, 0, 1 )';
 		ctx.lineWidth = 3;
 	    for ( var g = 0; g < 10; g++ ) {
-			var bh = Math.floor( 1 + ( random() * 5 ) * ( height / 10 ) ); 
-			var bw = Math.floor( 1 + ( random() * 5 ) * ( width / 10 ) ); 
+			var bh = Math.floor( 1 + ( random() * 7 ) * ( height / 10 ) ); 
+			var bw = Math.floor( 1 + ( random() * 7 ) * ( width / 10 ) ); 
 			var x = Math.floor( random() * 10 * ( ( ( width - bw ) / 10 ) ) );
 			var y = Math.floor( random() * 10 * ( ( ( height - bh ) / 10 ) ) );
 			ctx.strokeRect(x,y,bw,bh);
