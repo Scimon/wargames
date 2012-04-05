@@ -131,7 +131,7 @@ var Game_HexMap_View = Backbone.View.extend( {
 	'render' : function() {
 	    var bottom = this.model.hex_at( this.model.get('width') - 1, this.model.get('height') - Math.floor( ( this.model.get('width') ) / 2 ) );
 	    var box = bottom.box();
-	    $('.game-layer').css('width',box.bottom_right.get('x') + 'px').css('height',box.bottom_right.get('y') + 'px' );
+	    $('.game-layer').width(box.bottom_right.get('x')).height(box.bottom_right.get('y'));
 	    this.$el.attr( 'width',box.bottom_right.get('x') ).attr( 'height',box.bottom_right.get('y') );
 	    var ctx = this.el.getContext('2d');
 	    _.each( this._hex_views, function( view ) { 
