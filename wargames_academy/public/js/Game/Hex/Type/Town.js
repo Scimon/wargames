@@ -20,7 +20,7 @@ var Game_Hex_Type_Town = Game_Hex_Type.extend( {
 			rects.push( [x,y,bw,bh] );
 		
 	    }
-		for ( var o,i=0; o = rects[i]; o++ ) {
+		for ( var o,i=0; o = rects[i]; i++ ) {
 			ctx.fillRect(o[0],o[1],o[2],o[3]);
 		}
 	}
