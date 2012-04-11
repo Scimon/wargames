@@ -34,6 +34,7 @@ var Game_HexMap = Backbone.Model.extend( {
 		}, this );
 	    collection.each( function( hex, index ) {
 		    hex.set('hexRadius', this.get('hexRadius') );
+		    hex.set('scale', this.get('scale') );
 		    hex.set('map_height', this.get('height') );
 		    hex.set('map_width', this.get('width') );
 		}, this);
@@ -45,6 +46,7 @@ var Game_HexMap = Backbone.Model.extend( {
 	    this.set( 'hexRadius', this.get( 'radius' ) * this.get('scale') );
 	    this.get('hexes').each( function( hex ) {
 		    hex.set('hexRadius', this.get('hexRadius') );
+		    hex.set('scale', this.get('scale') );
 		    hex._calc_halves();
 		}, this );
 	},

@@ -38,6 +38,16 @@
 	}
     }
 
+    sub hex_at {
+	my ( $self, $x, $y ) = @_;
+	foreach my $hex ( $self->hex_list() ) {
+	    if ( $hex->x() == $x && $hex->y() == $y ) {
+		return $hex;
+	    }
+	}
+	return undef;
+    }
+
     sub make_map {
 	my ( $self, $height, $width, $default_type  ) = @_;
 	my $factory = new Game::Hex::Type::Factory();

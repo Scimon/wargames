@@ -7,7 +7,7 @@
 	use Moose::Util::TypeConstraints;
 
 	subtype 'VectorPoint' => as 'Str' => where {  
-		$_ =~ /^[sc][0-5]$/;
+		$_ =~ /^[sc][0-5]|c$/;
 	};
 
 	has 'start', is => 'rw', isa => 'VectorPoint', default => sub { 's0' };

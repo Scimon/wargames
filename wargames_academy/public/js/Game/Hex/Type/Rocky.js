@@ -1,5 +1,5 @@
 var Game_Hex_Type_Rocky = Game_Hex_Type.extend( {
-	'draw' : function( ctx, hex ) {
+	'_drawBase' : function( ctx, hex ) {
 	    var height = hex._half_height * 2;
 	    var width = hex._half_width * 2;
 	    var land_height = hex.get('height');

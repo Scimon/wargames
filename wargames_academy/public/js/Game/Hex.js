@@ -8,6 +8,7 @@ var Game_Hex = Backbone.Model.extend( {
 	    'map_height' : 0,
 	    'map_width' : 0,
 	    'hexRadius' : 0,
+	    'scale' : 0,
 	    'random' : null,
 	    'selected' : 0,
 	},
@@ -61,7 +62,6 @@ var Game_Hex = Backbone.Model.extend( {
 	    return { 'top_left' : top_left, 'bottom_right' : bottom_right };
 	},
 	'vertices' : function() {
-	    var center = this.center();
 	    var hhw = Math.round( this._half_width / 2 );
 	    var x = this._half_width;		
 	    var y = this._half_height;
@@ -74,6 +74,31 @@ var Game_Hex = Backbone.Model.extend( {
 	    ret.push( new Vector( { 'x' : x - hhw, 'y' : y + this._half_height } ) );
 	    return ret;
 	},
+	'sides' : function() {
+	    var hh = Math.round( this._half_height / 2 );
+	    var tqr = Math.round( this._half_width / 4 * 3 );
+	    var x = this._half_width;		
+	    var y = this._half_height;
+	    var ret = [];
+	    ret.push( new Vector( { 'x' : x - tqr, 'y' : y - hh } ) );
+	    ret.push( new Vector( { 'x' : x , 'y' : y - this._half_height } ) );
+	    ret.push( new Vector( { 'x' : x + tqr, 'y' : y - hh } ) );
+	    ret.push( new Vector( { 'x' : x + tqr, 'y' : y + hh } ) );
+	    ret.push( new Vector( { 'x' : x , 'y' : y + this._half_height } ) );
+	    ret.push( new Vector( { 'x' : x - tqr, 'y' : y + hh } ) );
+	    return ret;
+	},
+	'processPoint' : function( point ) {
+	    var sides = this.sides();
+	    var corners = this.vertices();
+	    var from = point.match( /^([sc])(\d)$/ );
+	    if ( from.length == 3 ) {
+		from = from[1] == 's' ? sides[from[2]] : corners[from[2]];
+	    } else { 
+		from = sides[0];
+	    }
+	    return from;
+	}
 
 } );
 
@@ -85,18 +110,18 @@ var Game_Hex_View = Backbone.View.extend( {
 	    $(this.el).attr( 'width',width ).attr( 'height',height );
 	    var ctx = this.el.getContext('2d');
 	    ctx.strokeStyle = 'rgba( 0,0,0,1 )';
-	    ctx.lineWidth = 1.5;
+	    ctx.lineWidth = this.model.scale / 2;
 
 	    ctx.save();
 	    this.follow_path( ctx, this.model.vertices() );
 	    ctx.clip();
 
 	    this.model.get('hextype').draw( ctx, this.model );
-
+	    
 	    if ( this.model.get('selected') ) {
-			this.greyscale( ctx, width, height, 255 );
-			ctx.fillStyle = 'rgba( 255,0,0,0.25 )';
-			ctx.fillRect(0,0,width,height);
+		this.greyscale( ctx, width, height, 255 );
+		ctx.fillStyle = 'rgba( 255,0,0,0.25 )';
+		ctx.fillRect(0,0,width,height);
 	    }
 
 	    ctx.restore();
@@ -105,22 +130,34 @@ var Game_Hex_View = Backbone.View.extend( {
 
 	    return this;
 	},
-	'greyscale' : function(ctx,width,height,weight) {
-		var imgPixels = ctx.getImageData(0, 0, width, height);
+	'greyscale' : function(ctx,width,height,spread) {
+	    var imgPixels = ctx.getImageData(0, 0, width, height);
+	    var min = 255;
+	    var max = 0;
 
-		for( var y = 0; y < imgPixels.height; y++){
-			for( var x = 0; x < imgPixels.width; x++){
-				var i = (y * 4) * imgPixels.width + x * 4;
-				var avg = (imgPixels.data[i] + imgPixels.data[i + 1] + imgPixels.data[i + 2]) / 3;
-				if ( ! _.isNull( weight ) ) {
-					avg = ( avg + weight ) / 2;
-				}
-				imgPixels.data[i] = avg;
-				imgPixels.data[i + 1] = avg;
-				imgPixels.data[i + 2] = avg;
-			}
+	    for( var y = 0; y < imgPixels.height; y++){
+		for( var x = 0; x < imgPixels.width; x++){
+		    var i = ( (y * 4) * imgPixels.width ) + ( x * 4) ;
+		    var avg = Math.floor( (imgPixels.data[i] + imgPixels.data[i + 1] + imgPixels.data[i + 2]) / 3 );
+		    min = min > avg ? avg : min;
+		    max = max < avg ? avg : max;
+		    imgPixels.data[i] = avg;
 		}
-		ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+	    }
+	    var diff = max - min;
+	    var mid = Math.floor( min + ( diff / 2 ) );
+	    var mult = Math.floor( spread / diff );
+	    for( var y = 0; y < imgPixels.height; y++){
+		for( var x = 0; x < imgPixels.width; x++){
+		    var i = ( (y * 4) * imgPixels.width ) + ( x * 4) ;
+		    var val = imgPixels.data[i];
+		    val = Math.floor( ( ( val - mid ) * mult ) + mid );
+		    imgPixels.data[i] = val;
+		    imgPixels.data[i + 1] = val;
+		    imgPixels.data[i + 2] = val;
+		}
+	    }   
+	    ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
 
 	},
 	'follow_path' : function( ctx, list ) {

@@ -19,4 +19,7 @@ var Vector = Backbone.Model.extend( {
 	'add' : function(vec) {
 	    return new Vector( { 'x' : this.get('x') + vec.get('x'), 'y' : this.get('y') + vec.get('y') } );
 	},
+	'sub' : function(vec) {
+	    return new Vector( { 'x' : this.get('x') - vec.get('x'), 'y' : this.get('y') - vec.get('y') } );
+	}, 
 } );
