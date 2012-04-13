@@ -15,6 +15,12 @@
 		my $type = shift;
 		my @args = @_;
 
+ 		if ( ref($type) eq ref({}) ) {
+			my %args = %{$type};
+			$type = $args{'type'};
+			@args = %args;
+		}
+
 		if ( defined $types{$type} ) {
 			return $types{$type}->new( @args );
 		} else {
