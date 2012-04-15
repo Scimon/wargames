@@ -46,23 +46,14 @@ position: relative; border: 1px solid #000; height: 800px; width: 800px; overflo
 <div id="hex_editor"></div>
 <div id="gamemap"></div>
 
-
-<script>
-//var game = new Game( 'gamemap' );
-//if ( game != null ) {
-//game.loadMapData( mapdata );
-//}
-//$('.scale').click( function() { game.setScale( this.value * 1 );  } );
-//$('#up').click( function() { game.movePosition( 0, -1 ); } );
-//$('#down').click( function() { game.movePosition( 0, 1 ); } );
-//$('#left').click( function() { game.movePosition( -1, 0 ); } );
-//$('#right').click( function() { game.movePosition( 1, 0 ); } );
-</script>
-
 <script type="text/template" id="hex_editor_template">
 <p>Hex Type : <select id="type_list"><% foreach my $type ( @{$types} ) { %><option><%= $type %></option>
 <% } %>
 </select>
 </p>
-<p>Height : <%%= height %></p>
+<p>Features: <select id="feature_list"><% foreach my $feature ( @{$features} ) { %><option><%= $feature %></option>
+<% } %>
+</select>
+<input type="button" value="Add" id="add_feature"><p>
+<div id="features"></div>
 </script>

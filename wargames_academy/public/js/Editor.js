@@ -9,7 +9,7 @@ var Editor = Game.extend( {
 	    if ( hex ) {
 		hex.set( 'selected', 1 );
 		this.editor = new Hex_Editor( { el : $('#hex_editor'), model : hex  } );
-
+		
 	    }
 	}
 	
@@ -29,6 +29,12 @@ var Hex_Editor = Backbone.View.extend( {
 	    }
 	    this.delegateEvents();
 	    this.$el.css('display','block');
+	    this.model.get('features').each( function( model ) {
+		    var className = 'Editor_Feature_' + model.get('type');
+		    var view =  new window[className]( { 'model' : model } );
+		    $('#features').append( view.render().el );
+		},this );
+	    
 	},
 	'hide' : function() {
 	    this.$el.css('display','none');
@@ -43,7 +49,7 @@ var Hex_Editor = Backbone.View.extend( {
 	},
 	'render' : function() {
 	    this.$el.html(this.template(this.model.toJSON()));
-	    
+
 	    return this;
 	}
     });

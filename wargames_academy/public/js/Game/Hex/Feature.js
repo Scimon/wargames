@@ -1,5 +1,5 @@
 var Game_Hex_Feature = Backbone.Model.extend( {
-	'initialiaze' : function() {
+	'initialize' : function() {
 	    if ( this.has( '__CLASS__' ) ) {
 		this.unset( '__CLASS__' );
 	    }

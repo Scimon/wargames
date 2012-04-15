@@ -15,30 +15,38 @@ var Game_Hex = Backbone.Model.extend( {
 	'url' : function() {
 	    return this.get('url');
 	},
-	'initialize' : function() {
+	'load_data' : function() {
 	    if ( this.has( '__CLASS__' ) ) {
-		this.unset( '__CLASS__' );
-	    }
-	    if ( this.has( 'hextype' ) ) {
-		var obj = this.get('hextype');
-		var className = obj.__CLASS__.replace( /::/g, '_' );
-		this.set('hextype', new window[className]( obj ) );
-	    }
-	    var Data = _.map( this.get('features'),  
-			      function( obj ) { 
-				  var className = obj.__CLASS__.replace( /::/g, '_' );
-				  delete obj.__CLASS__;
-				  return new window[className]( obj ); 
-			      } );
-	    this.set('features', new Game_Hex_Feature_Collection( Data ) );
-	    this.set('id', this.get('map_id') + '/' + this.get('x') + '/' + this.get('y') );
+                this.unset( '__CLASS__' );
+            }
+            if ( this.has( 'hextype' ) && this.get('hextype')['__CLASS__']  ) {
+                var obj = this.get('hextype');
+                var className = obj.__CLASS__.replace( /::/g, '_' );
+                this.set('hextype', new window[className]( obj ) );
+            }
+            var Data = _.map( this.get('features'),
+                              function( obj ) {
+				  if ( obj['__CLASS__'] ) {
+				      var className = obj.__CLASS__.replace( /::/g, '_' );
+				      delete obj.__CLASS__;
+				      return new window[className]( obj );
+				  }
+                              } );
+            this.set('features', new Game_Hex_Feature_Collection( Data ) );
+            this.set('id', this.get('map_id') + '/' + this.get('x') + '/' + this.get('y') );
+	},
+	'initialize' : function() {
+	    this.load_data();
 	    this._calc_halves();
 	    this.on('change:hexRadius', this._calc_halves, this );
+	    this.on('change:hextype', this.load_data,this );
 	},
 	'setHexType' : function(type) {
 	    var className = 'Game_Hex_Type_' + type;
 	    var newType = new window[className]( { 'name' : type } );
-	    this.save({'hextype' : newType});
+	    var selected = this.get('selected');
+	    this.save({'hextype' : newType},{'wait':true});
+	    this.set('selected',selected);
 	},
 	'random' : function() {
 	    return globalFunctions.Alea( this.get('x'), this.get('y'), this.get('map_height'), this.get('map_width') );

@@ -6,9 +6,15 @@
 
 	use Game::Hex::Feature::Slope;
 	use Game::Hex::Feature::River;
+	use Game::Hex::Feature::Height;
 
 
-	my %types = map { $_ => "Game::Hex::Feature::$_" } qw( Slope River );
+	my @typelist = qw( Slope River Height );
+	my %types = map { $_ => "Game::Hex::Feature::$_" } @typelist;
+
+	sub features_available {
+	    return @typelist;
+	}
 
 	sub make {
 		my $self = shift;
