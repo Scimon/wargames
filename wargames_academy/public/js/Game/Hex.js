@@ -15,6 +15,11 @@ var Game_Hex = Backbone.Model.extend( {
 	'url' : function() {
 	    return this.get('url');
 	},
+	'check_load' : function() {
+	    if ( this.has( '__CLASS__' ) ) {
+		this.load_data();
+	    }
+	},
 	'load_data' : function() {
 	    if ( this.has( '__CLASS__' ) ) {
                 this.unset( '__CLASS__' );
@@ -30,16 +35,23 @@ var Game_Hex = Backbone.Model.extend( {
 				      var className = obj.__CLASS__.replace( /::/g, '_' );
 				      delete obj.__CLASS__;
 				      return new window[className]( obj );
+				  } else {
+				      return obj;
 				  }
                               } );
             this.set('features', new Game_Hex_Feature_Collection( Data ) );
+	    this.get('features').bind( 'change', this.updateFeatures, this );
             this.set('id', this.get('map_id') + '/' + this.get('x') + '/' + this.get('y') );
 	},
 	'initialize' : function() {
 	    this.load_data();
 	    this._calc_halves();
 	    this.on('change:hexRadius', this._calc_halves, this );
-	    this.on('change:hextype', this.load_data,this );
+	},
+	'updateFeatures' : function() {
+	    var selected = this.get('selected');
+	    this.save( { 'features' : this.get('features') },{'wait':true});
+	    this.set('selected',selected);
 	},
 	'setHexType' : function(type) {
 	    var className = 'Game_Hex_Type_' + type;
@@ -113,12 +125,13 @@ var Game_Hex = Backbone.Model.extend( {
 var Game_Hex_View = Backbone.View.extend( {
 	'tagName' : 'canvas',
 	'render' : function() {
+	    this.model.check_load();
 	    var height = this.model._half_height * 2;
 	    var width = this.model._half_width * 2;
 	    $(this.el).attr( 'width',width ).attr( 'height',height );
 	    var ctx = this.el.getContext('2d');
 	    ctx.strokeStyle = 'rgba( 0,0,0,1 )';
-	    ctx.lineWidth = this.model.scale / 2;
+	    ctx.lineWidth = this.model.get('scale') / 2;
 
 	    ctx.save();
 	    this.follow_path( ctx, this.model.vertices() );
@@ -127,9 +140,10 @@ var Game_Hex_View = Backbone.View.extend( {
 	    this.model.get('hextype').draw( ctx, this.model );
 	    
 	    if ( this.model.get('selected') ) {
-		this.greyscale( ctx, width, height, 255 );
-		ctx.fillStyle = 'rgba( 255,0,0,0.25 )';
-		ctx.fillRect(0,0,width,height);
+		ctx.strokeStyle = 'rgba( 255,0,0,0.5 )';
+		ctx.lineWidth = this.model.get('scale') * 5;
+		this.follow_path( ctx, this.model.vertices() );
+		ctx.stroke();
 	    }
 
 	    ctx.restore();
