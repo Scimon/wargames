@@ -7,6 +7,8 @@
 	use Game::Hex::Feature::Slope;
 	use Game::Hex::Feature::River;
 	use Game::Hex::Feature::Height;
+	use Game::Hex::Feature::Road;
+	use Game::Hex::Feature::Bridge;
 
 
 	my @typelist = qw( River Road Bridge Slope Height );
