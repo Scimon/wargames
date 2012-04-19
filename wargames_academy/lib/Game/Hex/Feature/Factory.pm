@@ -9,7 +9,7 @@
 	use Game::Hex::Feature::Height;
 
 
-	my @typelist = qw( Slope River Height );
+	my @typelist = qw( River Road Bridge Slope Height );
 	my %types = map { $_ => "Game::Hex::Feature::$_" } @typelist;
 
 	sub features_available {
