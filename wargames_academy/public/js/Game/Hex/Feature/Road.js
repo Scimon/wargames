@@ -1,4 +1,4 @@
-var Game_Hex_Feature_Slope = Game_Hex_Feature.extend({
+var Game_Hex_Feature_Road = Game_Hex_Feature.extend({
 	'draw' : function( ctx, hex, grid ) {
 	    var canvas = this.blankCanvas( hex );
 	    var newCtx = canvas.getContext( '2d' );
