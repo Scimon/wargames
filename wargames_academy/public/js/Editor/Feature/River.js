@@ -4,14 +4,12 @@ var Editor_Feature_River = Editor_Feature.extend({
 	    var end = this.position_select(  'end', this.model.get('end') );
 
 	    this.$el.html( "<p>River : Start " + start + " End " + end + "</p>" );
-	    this.start_select = $(this.model.cid + ':start');
-	    this.end_select = $(this.model.cid + ':end');
-	    this.delegateEvents();
 	    return this;
 	},
-	'events' : {
-	    'change select.start' : 'update_points',
-	    'change select.end' : 'update_points',
+	'events' : function() {
+	    this._events['change select.start'] = 'update_points';
+	    this._events['change select.end'] = 'update_points';
+	    return this._events;
 	},
 	'update_points' : function( e ) {
 	    var selector = e.target;

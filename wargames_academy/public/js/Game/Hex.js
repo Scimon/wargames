@@ -41,6 +41,8 @@ var Game_Hex = Backbone.Model.extend( {
                               } );
             this.set('features', new Game_Hex_Feature_Collection( Data ) );
 	    this.get('features').bind( 'change', this.updateFeatures, this );
+	    this.get('features').bind( 'remove', this.updateFeatures, this );
+	    this.get('features').bind( 'add', this.updateFeatures, this );
             this.set('id', this.get('map_id') + '/' + this.get('x') + '/' + this.get('y') );
 	},
 	'initialize' : function() {

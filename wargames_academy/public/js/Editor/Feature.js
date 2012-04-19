@@ -5,6 +5,16 @@ var Editor_Feature = Backbone.View.extend( {
 	    this.$el.html( "Feature" );
 	    return this;
 	},
+	'_events' : {
+	    'click a.close' : 'remove_feature',
+	},
+	'wrapper' : function() {
+	    this.$el.append( "<a class='close'>X</a>" );
+            return this;
+	},
+        'remove_feature' : function() {
+	    this.model.collection.remove( this.model );
+	},
 	'create_new' : function() {
 	    console.log( "Implement creating a new feature of this type" );
 	    return null;

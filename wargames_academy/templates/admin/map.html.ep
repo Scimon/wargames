@@ -22,6 +22,22 @@ position: relative; border: 1px solid #000; height: 800px; width: 800px; overflo
 .game-layer{ position: absolute; }
 #mapdata { float: right; width: 300px; height: 300px; }
 #update { clear: right; float: right }
+#features div.feature-editor { 
+  position: relative;
+  padding-top: 5px;
+  border-top: 1px solid #333;
+}
+#features a.close {
+  position: absolute;
+  display: block;
+  top:0px;
+  right:0px;
+  font-size: 10px;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
 </style>
 % end
 

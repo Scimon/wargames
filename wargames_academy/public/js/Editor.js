@@ -30,10 +30,11 @@ var Hex_Editor = Backbone.View.extend( {
 	    this.delegateEvents();
 	    this.$el.css('display','block');
 	    this.model.get('features').each( function( model ) {
+		    model.collection = this;
 		    var className = 'Editor_Feature_' + model.get('type');
 		    var view =  new window[className]( { 'model' : model } );
-		    $('#features').append( view.render().el );
-		},this );
+		    $('#features').append( view.render().wrapper().el );
+		}, this.model.get('features') );
 	    
 	},
 	'reload' : function() {
@@ -47,10 +48,11 @@ var Hex_Editor = Backbone.View.extend( {
 		}
 	    }
 	    this.model.get('features').each( function( model ) {
+		    model.collection = this;
 		    var className = 'Editor_Feature_' + model.get('type');
 		    var view =  new window[className]( { 'model' : model } );
-		    $('#features').append( view.render().el );
-		},this );
+		    $('#features').append( view.render().wrapper().el );
+		},this.model.get('features') );
 
 	},
 	'hide' : function() {
@@ -71,7 +73,6 @@ var Hex_Editor = Backbone.View.extend( {
 		    var feature = edit.create_new();
 		    if ( feature ) {
 			this.model.get('features').push( feature );
-			this.model.save();
 		    }
 		}
 	    }
