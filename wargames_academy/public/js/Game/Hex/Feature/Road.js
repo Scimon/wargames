@@ -7,9 +7,9 @@ var Game_Hex_Feature_Road = Game_Hex_Feature.extend({
 	    var end = hex.processPoint( this.get('end') );
 	    var points = this.curvePoints( start, end, hex.random(), hex.get('scale') );
 		
-	    newCtx.strokeStyle = 'rgba( 250, 230, 120, 1 )';
+	    newCtx.strokeStyle = 'rgba( 220, 220, 190, 1 )';
 	    newCtx.lineCap = 'round';
-	    newCtx.lineWidth = hex.get('scale') * 5;
+	    newCtx.lineWidth = hex.get('scale') * 3;
 	    newCtx.beginPath();
 	    newCtx.moveTo( start.get('x'), start.get('y') );
 	    newCtx.bezierCurveTo( points.a.get('x'), points.a.get('y'), points.b.get('x'), points.b.get('y'), end.get('x'), end.get('y') );
