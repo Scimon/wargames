@@ -12,6 +12,10 @@
     use POSIX qw( floor );
     use JSON;    
 	use Database;
+
+	subtype 'MapStatus' => as 'Str' => where {  
+		$_ =~ /^edit|live|archive$/;
+	};
     
     has 'hexes' => ( is => 'rw', 
 		     isa => 'ArrayRef[Game::Hex]', 
@@ -27,7 +31,8 @@
     has 'id', is => 'rw', 'isa' => 'Int', 'default' => sub { 0 };
     has 'name', is => 'rw', isa => 'Str', 'default' => sub { '' };
     has 'url', is => 'rw', isa => 'Str', 'default' => '', 'trigger' => \&_set_url;
-    
+    has 'status', is => 'rw', isa => 'MapStatus', 'default' => sub { 'edit' };
+
     sub _set_url {
 	my ( $self, $url ) = @_;
 	
