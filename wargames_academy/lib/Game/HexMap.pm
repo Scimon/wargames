@@ -80,21 +80,25 @@
 	}
     
     sub save {
-	my $self = shift;
-	my $dbh = Database::connection();
-	
-	if ( $self->id() ) {
-	    $dbh->do( "UPDATE hexmap SET name = ? WHERE id = ?", undef, ( $self->name(), $self->id() ) );
-	    $self->map_hexes( sub { $_->map_id( $self->id() ) } );
-	} else {
-	    $dbh->do( "INSERT INTO hexmap ( name ) VALUES ( ? )", undef, ( $self->name() ) );
-	    $self->id( $dbh->last_insert_id(undef, undef, undef, undef) );
-	    $self->map_hexes( sub { $_->map_id( $self->id() ) } );
-	}
-
-	foreach my $hex ( $self->hex_list() ) {
-	    $hex->save();
-	}
+		my $self = shift;
+		my $dbh = Database::connection();
+		
+		if ( $self->status() == 'edit' ) {
+			if ( $self->id() ) {
+				$dbh->do( "UPDATE hexmap SET name = ? WHERE id = ?", undef, ( $self->name(), $self->id() ) );
+				$self->map_hexes( sub { $_->map_id( $self->id() ) } );
+			} else {
+				$dbh->do( "INSERT INTO hexmap ( name ) VALUES ( ? )", undef, ( $self->name() ) );
+				$self->id( $dbh->last_insert_id(undef, undef, undef, undef) );
+				$self->map_hexes( sub { $_->map_id( $self->id() ) } );
+			}
+			
+			foreach my $hex ( $self->hex_list() ) {
+				$hex->save();
+			}
+		} else {
+			$dbh->do( "UPDATE hexmap SET status = ? WHERE id = ?", undef, ( $self->status(), $self->id() ) );
+		}
     }
     
     sub load {
