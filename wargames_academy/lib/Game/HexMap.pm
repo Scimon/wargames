@@ -2,7 +2,7 @@
     package Game::HexMap;
 	
     use Moose;
-	use Moose::Util::TypeConstraints;
+    use Moose::Util::TypeConstraints;
     use MooseX::Storage;
     
     with Storage('format' => 'JSON');
@@ -12,9 +12,9 @@
     use Game::Hex::Feature::Factory;
     use POSIX qw( floor );
     use JSON;    
-	use Database;
+    use Database;
 
-	enum 'MapStatus', [qw( edit live archive )];
+    enum 'MapStatus', [qw( edit live archive )];
     
     has 'hexes' => ( is => 'rw', 
 		     isa => 'ArrayRef[Game::Hex]', 

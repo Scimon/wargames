@@ -1,5 +1,5 @@
 {
-	package Game::Troop;
+	package Game::Weapon;
 	use Moose::Role;
 
 	'module returns true';
