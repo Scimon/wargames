@@ -3,6 +3,8 @@
 	use Moose;
 
 	use Game::Troop;
+	use Game::Weapon;
+	use Game::Armour;
 
 	has 'troop' => is => 'rw', isa => 'Game::Troop'; 
 	has 'weapon' => is => 'rw', isa => 'Game::Weapon';
